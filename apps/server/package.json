@@ -1,0 +1,7 @@
+{
+  "name": "@kinga/server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local-only HTTP service for the Kinga UI. Binds to 127.0.0.1."
+}

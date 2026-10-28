@@ -10,5 +10,14 @@
     "resolveJsonModule": true,
     "noEmit": true
   },
-  "include": ["spikes", "packages", "apps", "eval", "scripts"]
+  "include": [
+    "spikes",
+    "packages",
+    "apps",
+    "eval",
+    "scripts"
+  ],
+  "exclude": [
+    "apps/web"
+  ]
 }

@@ -1,0 +1,496 @@
+:root {
+  --bg: #f5f6f3;
+  --surface: #ffffff;
+  --text: #1b2420;
+  --muted: #5d6a63;
+  --border: #dde2dc;
+  --accent: #0f6b4f;
+  --accent-soft: #e2f1ea;
+  --safe: #1f7a4d;
+  --safe-bg: #e3f3ea;
+  --warn: #8a5a00;
+  --warn-bg: #fdf1d8;
+  --high: #a64400;
+  --high-bg: #fde6d6;
+  --scam: #b3261e;
+  --scam-bg: #fbe1df;
+  --mark: #ffe58a;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111613;
+    --surface: #1a211d;
+    --text: #e6ece8;
+    --muted: #9aa8a0;
+    --border: #2c3631;
+    --accent: #4cc797;
+    --accent-soft: #1d3329;
+    --safe: #6fd39d;
+    --safe-bg: #18301f;
+    --warn: #f0c060;
+    --warn-bg: #352a12;
+    --high: #f59a5c;
+    --high-bg: #3a2416;
+    --scam: #f2867e;
+    --scam-bg: #3b1d1b;
+    --mark: #6b5a12;
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  width: 100%;
+  padding: 12px;
+}
+button.ghost {
+  background: transparent;
+}
+
+input,
+textarea {
+  font: inherit;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.brand h1 {
+  margin: 0;
+  font-size: 22px;
+}
+.brand p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 20px;
+}
+.chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.chip {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.chip.on {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: transparent;
+}
+
+nav {
+  display: flex;
+  gap: 4px;
+  margin: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+nav button {
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: none;
+  color: var(--muted);
+  padding: 10px 14px;
+}
+nav button.active {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+main.with-wallet {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 16px;
+  align-items: start;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.card h3 {
+  margin: 0 0 4px;
+  font-size: 17px;
+}
+.card h4 {
+  margin: 14px 0 6px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.muted {
+  color: var(--muted);
+}
+.small {
+  font-size: 12px;
+}
+.mono {
+  font-family: ui-monospace, Consolas, monospace;
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ok {
+  color: var(--safe);
+}
+.bad {
+  color: var(--scam);
+}
+.error {
+  color: var(--scam);
+}
+
+/* inbox */
+.inbox {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.message-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.message-list li {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.message-list li:last-child {
+  border-bottom: none;
+}
+.message-list li.active {
+  background: var(--accent-soft);
+}
+.sender {
+  font-weight: 600;
+}
+.preview {
+  color: var(--muted);
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.time {
+  font-size: 11px;
+  color: var(--muted);
+}
+.message-text {
+  white-space: pre-wrap;
+  margin: 8px 0 0;
+}
+mark {
+  background: var(--mark);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.badge.pending {
+  color: var(--muted);
+  border: 1px dashed var(--border);
+}
+.level-safe.badge {
+  background: var(--safe-bg);
+  color: var(--safe);
+}
+.level-suspicious.badge {
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+.level-high_risk.badge {
+  background: var(--high-bg);
+  color: var(--high);
+}
+.level-scam.badge {
+  background: var(--scam-bg);
+  color: var(--scam);
+}
+
+.verdict {
+  border-left-width: 4px;
+}
+.verdict.level-safe {
+  border-left-color: var(--safe);
+}
+.verdict.level-suspicious {
+  border-left-color: var(--warn);
+}
+.verdict.level-high_risk {
+  border-left-color: var(--high);
+}
+.verdict.level-scam {
+  border-left-color: var(--scam);
+}
+.verdict-head {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.explanation {
+  font-size: 16px;
+  margin: 10px 0 0;
+}
+.signals,
+.flags,
+.advice {
+  margin: 0;
+  padding-left: 18px;
+}
+.signals li,
+.flags li,
+.advice li {
+  margin: 3px 0;
+}
+.signals code {
+  font-size: 11px;
+  color: var(--muted);
+}
+.footnote {
+  margin: 14px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.own summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.form {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* release */
+.orders {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.order {
+  display: grid;
+  text-align: left;
+  gap: 2px;
+  min-width: 180px;
+}
+.order.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.steps {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+}
+.step {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+.step-title {
+  font-weight: 600;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.step-detail {
+  margin-top: 6px;
+  font-size: 14px;
+}
+.step-detail ul {
+  margin: 0;
+  padding-left: 18px;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  flex: none;
+}
+.step.pass .dot {
+  background: var(--safe);
+}
+.step.fail .dot {
+  background: var(--scam);
+}
+.step.fail {
+  border-color: var(--scam);
+}
+.chat {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.bubble {
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 8px 10px;
+  max-width: 85%;
+}
+.address {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 13px;
+}
+.buttons {
+  justify-content: flex-start;
+  margin-top: 6px;
+}
+.ack {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+}
+.ack input {
+  width: auto;
+}
+.result {
+  margin: 10px 0 0;
+  font-weight: 600;
+}
+
+/* wallet */
+.wallet dl {
+  margin: 8px 0;
+  font-size: 13px;
+}
+.wallet dt {
+  color: var(--muted);
+}
+.wallet dd {
+  margin: 0 0 6px;
+}
+.network-steps {
+  border: 1px dashed var(--high);
+  border-radius: 10px;
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+}
+.network-label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--high);
+}
+.releases {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+}
+.releases li {
+  margin: 4px 0;
+}
+.status-signed {
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+.status-broadcast,
+.status-confirmed {
+  background: var(--safe-bg);
+  color: var(--safe);
+}
+.status-failed,
+.status-reverted {
+  background: var(--scam-bg);
+  color: var(--scam);
+}
+
+@media (max-width: 860px) {
+  .inbox,
+  main.with-wallet {
+    grid-template-columns: 1fr;
+  }
+}
