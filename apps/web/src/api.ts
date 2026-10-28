@@ -42,6 +42,40 @@ export interface Order {
   story: string;
   buyerAddress: string;
   lookalikeAddress: string;
+  screenshot: string;
+}
+
+export interface ScreenshotFields {
+  transaction_code: string;
+  amount: number;
+  counterparty: string;
+  direction: "sent" | "received" | "unknown";
+  date: string;
+  time: string;
+}
+
+export interface PaymentCheck {
+  ok: boolean;
+  issues: { code: string; reason: string }[];
+  receipt?: { code?: string; amount?: number; counterparty?: string; date?: { day: number; month: number; year: number }; time?: string };
+}
+
+export interface VerifyResult {
+  screenshot: { fields: ScreenshotFields; ms: number };
+  check: PaymentCheck;
+}
+
+export interface LedgerRow {
+  id?: string;
+  time?: string;
+  code?: string;
+  kind: string;
+  counterparty?: string;
+  amount?: number;
+  delta?: number;
+  balance: number;
+  status: "fits" | "contradicts" | "does_not_fit" | "unverifiable";
+  reason: string;
 }
 
 export interface Blocked {
@@ -51,6 +85,7 @@ export interface Blocked {
 }
 
 export interface ReleaseCheckResult {
+  claim: { code: string; screenshot?: { fields: ScreenshotFields; ms: number } };
   receiptCheck: { ok: boolean; issues: { code: string; reason: string }[]; receipt?: { code?: string; amount?: number; counterparty?: string } };
   addressVerdict: { kind: "saved" | "poisoning" | "new" | "invalid" | "wrong_network"; reason?: string; contact?: { label: string } };
   chat: Verdict;
@@ -70,6 +105,7 @@ export interface WalletView {
 
 export interface Status {
   model: "disabled" | "loading" | "ready" | "failed";
+  reader: "disabled" | "loading" | "ready" | "failed";
   wallet: WalletView;
 }
 
@@ -89,6 +125,8 @@ export const api = {
   inbox: () => call<InboxItem[]>("GET", "/api/inbox"),
   analyzeInbox: (id: string) => call<Verdict>("POST", `/api/inbox/${id}/analyze`),
   analyze: (m: { channel: string; sender: string; contact: string | null; text: string }) => call<Verdict>("POST", "/api/analyze", m),
+  verify: (input: { orderId?: string; image?: string; amountKsh?: number; buyerName?: string }) => call<VerifyResult>("POST", "/api/verify", input),
+  ledger: () => call<LedgerRow[]>("GET", "/api/ledger"),
   orders: () => call<Order[]>("GET", "/api/orders"),
   checkRelease: (orderId: string, to: string) => call<ReleaseCheckResult>("POST", "/api/release/check", { orderId, to }),
   confirmRelease: (orderId: string, to: string) =>

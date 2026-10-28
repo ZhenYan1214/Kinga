@@ -220,6 +220,28 @@ const routes: [string, RegExp, Handler][] = [
       return verdictFor({ channel, sender: String(sender), contact: contact ? String(contact) : null, text: String(text) }, true);
     },
   ],
+  [
+    "GET",
+    /^\/api\/ledger$/,
+    // The seller's M-PESA history in time order, with what the balance chain says about each message.
+    async () =>
+      LEDGER.entries.map((e) => {
+        const check = LEDGER.check(e.message);
+        const item = DEMO_INBOX.find((m) => m === e.message);
+        return {
+          id: item?.id,
+          time: item?.time,
+          code: e.receipt.code,
+          kind: e.receipt.kind,
+          counterparty: e.receipt.counterparty,
+          amount: e.receipt.amount,
+          delta: e.delta,
+          balance: e.balance,
+          status: check.status,
+          reason: check.reason,
+        };
+      }),
+  ],
   ["GET", /^\/api\/orders$/, async () => DEMO_ORDERS.map(orderView)],
   [
     "POST",

@@ -1,24 +1,36 @@
 import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { api, type Status, type WalletView } from "./api";
+import { api, type Order, type Status, type WalletView } from "./api";
 import { Inbox } from "./Inbox";
+import { Ledger } from "./Ledger";
 import { Release } from "./Release";
+import { Verify } from "./Verify";
 import { WalletPanel } from "./WalletPanel";
 import "./styles.css";
 
+type Tab = "verify" | "ledger" | "release" | "inbox";
+const TABS: [Tab, string][] = [
+  ["verify", "Did they really pay?"],
+  ["ledger", "Your M-PESA ledger"],
+  ["release", "Release USDT"],
+  ["inbox", "Inbox guard"],
+];
+
 function App() {
-  const [tab, setTab] = useState<"inbox" | "release">("inbox");
+  const [tab, setTab] = useState<Tab>("verify");
   const [status, setStatus] = useState<Status>();
+  const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
     const load = () => api.status().then(setStatus, () => undefined);
     void load();
+    api.orders().then(setOrders, () => undefined);
     const timer = setInterval(load, 3000);
     return () => clearInterval(timer);
   }, []);
 
   const onWallet = (wallet: WalletView) => setStatus((s) => (s ? { ...s, wallet } : s));
-  const modelText = { ready: "on this device", loading: "loading on this device…", failed: "failed to load (rules only)", disabled: "off (rules only)" };
+  const modelText = { ready: "on this device", loading: "loading on this device…", failed: "failed to load", disabled: "off" };
 
   return (
     <div className="app">
@@ -27,29 +39,38 @@ function App() {
           <span className="logo">K</span>
           <div>
             <h1>Kinga</h1>
-            <p>Scam checks for M-Pesa and USDT that never leave your device</p>
+            <p>Before you hand anything over: did they really pay? Checked on your device, against your own M-PESA.</p>
           </div>
         </div>
         <div className="chips">
-          <span className={`chip ${status?.model === "ready" ? "on" : ""}`}>AI model: {status ? modelText[status.model] : "…"}</span>
-          <span className="chip on">Messages never leave this device</span>
+          <span className={`chip ${status?.reader === "ready" ? "on" : ""}`}>Screenshot reader: {status ? modelText[status.reader] : "…"}</span>
+          <span className={`chip ${status?.model === "ready" ? "on" : ""}`}>Message model: {status ? modelText[status.model] : "…"}</span>
+          <span className="chip on">Nothing leaves this device</span>
         </div>
       </header>
       <nav>
-        <button className={tab === "inbox" ? "active" : ""} onClick={() => setTab("inbox")}>
-          Inbox guard
-        </button>
-        <button className={tab === "release" ? "active" : ""} onClick={() => setTab("release")}>
-          Release USDT
-        </button>
+        {TABS.map(([id, label]) => (
+          <button key={id} className={tab === id ? "active" : ""} onClick={() => setTab(id)}>
+            {label}
+          </button>
+        ))}
       </nav>
       <main className={tab === "release" ? "with-wallet" : ""}>
-        {/* Both stay mounted so switching tabs keeps verdicts that are already computed. */}
-        <div hidden={tab !== "inbox"}>
-          <Inbox />
+        {/* All stay mounted so switching tabs keeps results that are already computed. */}
+        <div hidden={tab !== "verify"}>
+          <Verify orders={orders} />
+        </div>
+        <div hidden={tab !== "ledger"}>
+          <Ledger />
         </div>
         <div hidden={tab !== "release"}>
-          <Release onWallet={onWallet} walletVersion={`${status?.wallet.snapshot?.takenAt}|${status?.wallet.allowlist.length}|${status?.wallet.releases.length}`} />
+          <Release
+            onWallet={onWallet}
+            walletVersion={`${status?.wallet.snapshot?.takenAt}|${status?.wallet.allowlist.length}|${status?.wallet.releases.length}`}
+          />
+        </div>
+        <div hidden={tab !== "inbox"}>
+          <Inbox />
         </div>
         {tab === "release" && <WalletPanel wallet={status?.wallet} onWallet={onWallet} />}
       </main>

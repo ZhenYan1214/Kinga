@@ -80,16 +80,31 @@ export function Release({ onWallet, walletVersion }: { onWallet: (w: WalletView)
         {
           title: "1. The money is in your own M-PESA inbox",
           state: check.receiptCheck.ok ? "pass" : "fail",
-          detail: check.receiptCheck.ok ? (
+          detail: (
             <>
-              Found {check.receiptCheck.receipt?.code}: Ksh{check.receiptCheck.receipt?.amount?.toLocaleString()} from {check.receiptCheck.receipt?.counterparty}, matching the buyer's verified name.
+              <div className="claim">
+                {order && <img src={`/api/screenshots/${order.screenshot}`} alt="The buyer's payment screenshot" />}
+                <span className="small">
+                  {check.claim.screenshot
+                    ? `Buyer's screenshot, read on this device: code ${check.claim.code}, Ksh${check.claim.screenshot.fields.amount.toLocaleString()}.`
+                    : `Buyer quoted code ${check.claim.code} (screenshot reader unavailable).`}
+                </span>
+              </div>
+              {check.receiptCheck.ok ? (
+                <>
+                  Found {check.receiptCheck.receipt?.code} in your M-PESA: Ksh{check.receiptCheck.receipt?.amount?.toLocaleString()} from{" "}
+                  {check.receiptCheck.receipt?.counterparty}, matching the buyer's verified name, and its balance fits your history.
+                </>
+              ) : (
+                <ul>
+                  {check.receiptCheck.issues
+                    .filter((i, n, all) => !(i.code === "CODE_NOT_IN_INBOX" && all.some((j) => j.code === "FORGED_IN_INBOX")))
+                    .map((i, n) => (
+                      <li key={n}>{i.reason}</li>
+                    ))}
+                </ul>
+              )}
             </>
-          ) : (
-            <ul>
-              {check.receiptCheck.issues.map((i, n) => (
-                <li key={n}>{i.reason}</li>
-              ))}
-            </ul>
           ),
         },
         {
