@@ -29,7 +29,8 @@
     "spike:download-vision": "tsx spikes/download-vision.ts",
     "eval:ledger": "tsx eval/ledger.ts",
     "make:screenshots": "tsx scripts/make-screenshots.ts",
-    "spike:vision": "tsx spikes/vision-read.ts"
+    "spike:vision": "tsx spikes/vision-read.ts",
+    "models:download": "npm run spike:download && npm run spike:download-vision"
   },
   "dependencies": {
     "@qvac/sdk": "0.22.0",

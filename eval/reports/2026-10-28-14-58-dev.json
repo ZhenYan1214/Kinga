@@ -1,0 +1,4067 @@
+[
+ {
+  "id": "kv1-0001",
+  "mode": "rules",
+  "level": "suspicious",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S4",
+   "S21"
+  ]
+ },
+ {
+  "id": "kv1-0001",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S4",
+   "S21"
+  ],
+  "ms": 1206.9255000000012,
+  "jsonValid": true,
+  "explanation": "A P2P crypto buyer may try to get you to release funds before the money is actually in your account. Wait for the M-PESA confirmation before releasing anything."
+ },
+ {
+  "id": "kv1-0001",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S4",
+   "S21"
+  ],
+  "ms": 1323.030499999999,
+  "jsonValid": true,
+  "explanation": "A real buyer does not rush or pressure you to release crypto before the money is confirmed. Check your own MPESA SMS to confirm the payment. Do not release the crypto until you are sure the money is in your account."
+ },
+ {
+  "id": "kv1-0004",
+  "mode": "rules",
+  "level": "scam",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S11",
+   "S9",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0004",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_customer_care",
+  "signals": [
+   "S11",
+   "S9",
+   "S12"
+  ],
+  "ms": 1327.152399999999,
+  "jsonValid": true,
+  "explanation": "This is a fake customer care message. Real Safaricom will not ask for your PIN via a website. Check your Fuliza limit in the M-PESA app and do not visit the website."
+ },
+ {
+  "id": "kv1-0004",
+  "mode": "fused",
+  "level": "scam",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S11",
+   "S9",
+   "S12"
+  ],
+  "ms": 1518.3937999999998,
+  "jsonValid": true,
+  "explanation": "This is a fake message from a personal number asking for your PIN, which is not safe. The website is not official. Do not share your PIN or visit the site."
+ },
+ {
+  "id": "kv1-0005",
+  "mode": "rules",
+  "level": "scam",
+  "category": "relative_impersonation",
+  "signals": [
+   "S11",
+   "S4",
+   "S16",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0005",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S11",
+   "S4",
+   "S16",
+   "S12"
+  ],
+  "ms": 1738.1080999999995,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA confirmation that is trying to trick you into confirming a PIN for a system issue. The message is using informal language and slang, which is a red flag for a scam. Do not confirm any PINs or send money to unlock a system."
+ },
+ {
+  "id": "kv1-0005",
+  "mode": "fused",
+  "level": "scam",
+  "category": "relative_impersonation",
+  "signals": [
+   "S11",
+   "S4",
+   "S16",
+   "S12"
+  ],
+  "ms": 1936.6808999999994,
+  "jsonValid": true,
+  "explanation": "This is a fake customer care message pretending to be Safaricom. They do not ask for your PIN, and they use urgency to pressure you. Check your real balance in the M-PESA app and do not send anything back."
+ },
+ {
+  "id": "kv1-0007",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0007",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1429.354800000001,
+  "jsonValid": true,
+  "explanation": "This is a genuine message from Binance asking for a verification code. The message is standard and does not contain any suspicious elements. The user is advised not to share the code with anyone, which is a normal security practice."
+ },
+ {
+  "id": "kv1-0007",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1378.5436999999984,
+  "jsonValid": true,
+  "explanation": "This is a genuine message from Binance asking for a verification code. The code is for a specific purpose, and it's important not to share it with anyone. Always verify the sender's identity through official channels."
+ },
+ {
+  "id": "kv1-0009",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0009",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1275.3675999999978,
+  "jsonValid": true,
+  "explanation": "This is a normal message from a saved contact (Mum) asking for money for medicine. If it feels unusual, call her on the saved number to confirm. The request is for a legitimate reason."
+ },
+ {
+  "id": "kv1-0009",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1522.1418000000012,
+  "jsonValid": true,
+  "explanation": "This is a normal message from a saved contact (Mum) asking for 1,500 for medicine, which is typical for her. If it feels unusual, call her on the known number before sending."
+ },
+ {
+  "id": "kv1-0010",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0010",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1538.0259000000005,
+  "jsonValid": true,
+  "explanation": "This is a genuine NCBA message. The code 5521 is a known NCBA transfer code. The message is from a registered sender, so it is likely genuine. Do not disclose the code to anyone."
+ },
+ {
+  "id": "kv1-0010",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1786.3371000000006,
+  "jsonValid": true,
+  "explanation": "This is a genuine NCBA message asking you to use the code 5521 to complete a transfer. The message does not have any red flags. If you are unsure, contact NCBA directly through their official channels."
+ },
+ {
+  "id": "kv1-0011",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0011",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_customer_care",
+  "signals": [],
+  "ms": 1518.259900000001,
+  "jsonValid": true,
+  "explanation": "This is a fake SHA message. SHA does not ask for your ID number or request payments. Do not send money."
+ },
+ {
+  "id": "kv1-0011",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1827.7691000000013,
+  "jsonValid": true,
+  "explanation": "This is a message from SHA, a known agency, stating your registration is complete with 3 beneficiaries. It asks to contribute via Paybill 200222 using your ID number. Since there are no clear red flags, it's likely a genuine message. However, be cautious with personal information and verify the request with SHA directly."
+ },
+ {
+  "id": "kv1-0014",
+  "mode": "rules",
+  "level": "scam",
+  "category": "wrong_send_reversal",
+  "signals": [
+   "S3",
+   "S11",
+   "S4"
+  ]
+ },
+ {
+  "id": "kv1-0014",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [
+   "S3",
+   "S11",
+   "S4"
+  ],
+  "ms": 1361.331900000001,
+  "jsonValid": true,
+  "explanation": "This is a normal message from an unknown number, nothing suspicious in the message. If it feels unusual, call the number you know to verify."
+ },
+ {
+  "id": "kv1-0014",
+  "mode": "fused",
+  "level": "scam",
+  "category": "wrong_send_reversal",
+  "signals": [
+   "S3",
+   "S11",
+   "S4"
+  ],
+  "ms": 1813.8782999999967,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA receipt that asks you to send money back yourself, which is not how real mistaken transfers are reversed. The message also asks for a secret, which is not something Safaricom or banks would request."
+ },
+ {
+  "id": "kv1-0015",
+  "mode": "rules",
+  "level": "suspicious",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0015",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S12"
+  ],
+  "ms": 2054.7841000000044,
+  "jsonValid": true,
+  "explanation": "This is a fake loan offer that asks you to pay a fee to get a loan. The link to forms.gle is suspicious, and the deadline to complete the form is a red flag. Do not pay the fee and verify the offer through official channels."
+ },
+ {
+  "id": "kv1-0015",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S12"
+  ],
+  "ms": 1747.4181000000026,
+  "jsonValid": true,
+  "explanation": "HUSTLER FUND is a known scam that asks for money to get a loan. The message comes from a personal number, not an organisation, and includes a link to a form. Do not send money or fill out forms."
+ },
+ {
+  "id": "kv1-0016",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0016",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1346.7145000000019,
+  "jsonValid": true,
+  "explanation": "This is a normal request from a saved contact (Dad) asking for money for a specific purpose. If it feels unusual, call him directly to confirm."
+ },
+ {
+  "id": "kv1-0016",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1232.8842000000004,
+  "jsonValid": true,
+  "explanation": "This is a request from a saved contact (Dad) in his usual way, with nothing unusual in it. If it feels out of character, call him on the number you know before sending."
+ },
+ {
+  "id": "kv1-0018",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [
+   "S7",
+   "S7"
+  ]
+ },
+ {
+  "id": "kv1-0018",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [
+   "S7",
+   "S7"
+  ],
+  "ms": 947.2883999999976,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation. The transaction was reversed, and the balance is updated. No action is needed."
+ },
+ {
+  "id": "kv1-0018",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [
+   "S7",
+   "S7"
+  ],
+  "ms": 1368.794200000004,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA receipt that does not follow the standard message format. The absence of the balance line is a sign of a forgery. Check your balance in the M-PESA app and do not send anything back."
+ },
+ {
+  "id": "kv1-0020",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0020",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1245.5224999999991,
+  "jsonValid": true,
+  "explanation": "This is a normal message from an unknown number, asking for a rider to deliver an order. If you are not a customer of Chakula Express, do not respond. If you are, follow the instructions from the app. If you are not, ignore the message."
+ },
+ {
+  "id": "kv1-0020",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1146.9009000000005,
+  "jsonValid": true,
+  "explanation": "This is a message from an unknown number asking for a rider to deliver an order. Since there are no specific red flags, it's likely a regular message. Be cautious if the request seems urgent or unusual."
+ },
+ {
+  "id": "kv1-0021",
+  "mode": "rules",
+  "level": "scam",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S6"
+  ]
+ },
+ {
+  "id": "kv1-0021",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S6"
+  ],
+  "ms": 1478.1872999999978,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA confirmation sent from an unknown number. The sender is not in your contacts, and the message is a known forgery sign. Check your real balance in the M-PESA app and do not send anything back."
+ },
+ {
+  "id": "kv1-0021",
+  "mode": "fused",
+  "level": "scam",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S6"
+  ],
+  "ms": 1469.5328999999983,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA receipt sent from an ordinary phone number, and the transaction code is not the correct format. Check your real balance in the M-PESA app and do not send anything back."
+ },
+ {
+  "id": "kv1-0022",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0022",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1298.8385000000053,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender. The balance and transaction details are standard and do not indicate any scam. No urgent actions or suspicious requests are mentioned."
+ },
+ {
+  "id": "kv1-0022",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1585.6536999999953,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message provides a clear transaction details and balance information without any suspicious elements. No red flags were found in the message."
+ },
+ {
+  "id": "kv1-0024",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S10",
+   "S17"
+  ]
+ },
+ {
+  "id": "kv1-0024",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S10",
+   "S17"
+  ],
+  "ms": 1577.8522000000012,
+  "jsonValid": true,
+  "explanation": "This is a scam that pretends to offer a 'loss recovery package' for a fee. Real businesses do not ask for money to recover losses. Do not pay."
+ },
+ {
+  "id": "kv1-0024",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S10",
+   "S17"
+  ],
+  "ms": 1535.8453999999983,
+  "jsonValid": true,
+  "explanation": "This is a fake investment or tip scam that promises double returns and asks for money upfront. Genuine investments do not offer guaranteed high returns. Do not send money."
+ },
+ {
+  "id": "kv1-0025",
+  "mode": "rules",
+  "level": "scam",
+  "category": "fake_customer_care",
+  "signals": [
+   "S11",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0025",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_customer_care",
+  "signals": [
+   "S11",
+   "S12"
+  ],
+  "ms": 1858.2194999999992,
+  "jsonValid": true,
+  "explanation": "Safaricom customer care does not ask for PINs or codes sent to you. Do not share any PINs or codes with anyone. Contact Safaricom directly through their official channels."
+ },
+ {
+  "id": "kv1-0025",
+  "mode": "fused",
+  "level": "scam",
+  "category": "fake_customer_care",
+  "signals": [
+   "S11",
+   "S12"
+  ],
+  "ms": 1743.5518999999986,
+  "jsonValid": true,
+  "explanation": "Safaricom does not ask for your PIN or OTP. The message is from a personal number, not an organisation. Do not share any codes or PINs."
+ },
+ {
+  "id": "kv1-0026",
+  "mode": "rules",
+  "level": "scam",
+  "category": "job_scam",
+  "signals": [
+   "S11",
+   "S10",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0026",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S11",
+   "S10",
+   "S12"
+  ],
+  "ms": 1874.0072,
+  "jsonValid": true,
+  "explanation": "This is a request for personal information and to send money to a number, which is a sign of a scam. Do not provide personal details and avoid sending money."
+ },
+ {
+  "id": "kv1-0026",
+  "mode": "fused",
+  "level": "scam",
+  "category": "job_scam",
+  "signals": [
+   "S11",
+   "S10",
+   "S12"
+  ],
+  "ms": 1890.2213000000047,
+  "jsonValid": true,
+  "explanation": "This is a fake job offer that asks for your personal details and wants money upfront. Real employers do not ask for this before starting work. Do not send money or share personal information."
+ },
+ {
+  "id": "kv1-0028",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0028",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1276.777700000006,
+  "jsonValid": true,
+  "explanation": "This is a normal message from an unknown number, nothing suspicious in the content. If it feels unusual, call the number directly to verify."
+ },
+ {
+  "id": "kv1-0028",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1548.5184999999983,
+  "jsonValid": true,
+  "explanation": "This is a message from an unknown number, but there are no clear red flags. The message is in Swahili and seems to be a general greeting. If it feels suspicious, call the number directly to verify."
+ },
+ {
+  "id": "kv1-0031",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0031",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1502.349199999997,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message includes a transaction confirmation, paybill account details, and balance information. No suspicious elements are present."
+ },
+ {
+  "id": "kv1-0031",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1307.1312000000034,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message includes a valid transaction details and balance information. No suspicious elements detected."
+ },
+ {
+  "id": "kv1-0032",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0032",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1596.6882000000041,
+  "jsonValid": true,
+  "explanation": "This is a genuine message from Safaricom about Bonga Points. The offer to redeem points for data, SMS, or minutes is legitimate. The terms apply, and the website is provided for more details. No suspicious activity is indicated in the message."
+ },
+ {
+  "id": "kv1-0032",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1272.1991000000125,
+  "jsonValid": true,
+  "explanation": "This is a genuine message from Safaricom about Bonga Points. The offer to redeem them for data, SMS, or minutes is legitimate and follows standard procedures. There is no indication of a scam in the message."
+ },
+ {
+  "id": "kv1-0035",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0035",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1283.0504999999976,
+  "jsonValid": true,
+  "explanation": "This is a genuine message from NairobiWater, as they are a registered sender. The message provides a clear bill amount and payment instructions. If you have a water bill, you should pay it as instructed. However, always verify the bill details through official channels to ensure accuracy."
+ },
+ {
+  "id": "kv1-0035",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1198.5752999999968,
+  "jsonValid": true,
+  "explanation": "This is a genuine water bill notification from a registered sender. The message is straightforward and does not contain any suspicious elements. If you have any doubts, you can verify the bill through the official water service website or contact the customer service directly."
+ },
+ {
+  "id": "kv1-0036",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0036",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_mpesa_confirmation",
+  "signals": [],
+  "ms": 1373.0101999999897,
+  "jsonValid": true,
+  "explanation": "This is a fake Binance confirmation. The sender is Binance, but the message is a scam. Do not send money to a personal number. Check your account in the app and do not send anything back."
+ },
+ {
+  "id": "kv1-0036",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1062.460500000001,
+  "jsonValid": true,
+  "explanation": "This is a genuine Binance withdrawal confirmation. If you did not request this transaction, contact Binance support immediately to secure your account. Always verify transactions through the official app."
+ },
+ {
+  "id": "kv1-0037",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0037",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1042.5485999999946,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message includes a transaction confirmation and balance details. No suspicious elements detected."
+ },
+ {
+  "id": "kv1-0037",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1114.0448999999935,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message provides a clear transaction details and balance information without any suspicious elements. No red flags were found in the message."
+ },
+ {
+  "id": "kv1-0038",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0038",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 981.843200000003,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA transaction confirmation. The sender is MPESA, and the details match a real transaction. No suspicious activity detected."
+ },
+ {
+  "id": "kv1-0038",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1015.8439000000071,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message includes a transaction details and balance information. No suspicious elements detected."
+ },
+ {
+  "id": "kv1-0041",
+  "mode": "rules",
+  "level": "suspicious",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S4",
+   "S21"
+  ]
+ },
+ {
+  "id": "kv1-0041",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S4",
+   "S21"
+  ],
+  "ms": 1253.9661999999953,
+  "jsonValid": true,
+  "explanation": "The sender is trying to pressure you to release the crypto before it is actually in your account. The payment was sent from a different line, so the money is not yet confirmed. Do not release the crypto until it is confirmed in your account."
+ },
+ {
+  "id": "kv1-0041",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S4",
+   "S21"
+  ],
+  "ms": 1278.954899999997,
+  "jsonValid": true,
+  "explanation": "This is a P2P crypto payment fraud. The buyer is trying to rush you to release funds before the payment is confirmed. Check your own M-PESA SMS to confirm the payment is real."
+ },
+ {
+  "id": "kv1-0046",
+  "mode": "rules",
+  "level": "suspicious",
+  "category": "fake_prize",
+  "signals": [
+   "S4",
+   "S22"
+  ]
+ },
+ {
+  "id": "kv1-0046",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S4",
+   "S22"
+  ],
+  "ms": 1208.7204000000056,
+  "jsonValid": true,
+  "explanation": "This is a car scam where the sender promises a free car but asks for payment to arrange the transfer. Do not pay to get a free car."
+ },
+ {
+  "id": "kv1-0046",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "fake_prize",
+  "signals": [
+   "S4",
+   "S22"
+  ],
+  "ms": 1118.6005999999907,
+  "jsonValid": true,
+  "explanation": "This is a fake prize offer that uses urgency and false claims of winning. Do not call the number and do not send money."
+ },
+ {
+  "id": "kv1-0048",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0048",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1109.4609999999957,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender. The message includes a transaction confirmation, balance details, and transaction cost, which are standard for M-PESA. No suspicious elements are present."
+ },
+ {
+  "id": "kv1-0048",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1115.129700000005,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message includes a clear transaction details and balance information without any suspicious elements. No red flags were found in the message."
+ },
+ {
+  "id": "kv1-0051",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0051",
+  "mode": "llm",
+  "level": "suspicious",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1497.2212,
+  "jsonValid": true,
+  "explanation": "This is a legitimate payment request for school fees, but the date specified is unusual. Verify the school's official communication channels and ensure the Paybill number matches the school's records."
+ },
+ {
+  "id": "kv1-0051",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1369.063799999989,
+  "jsonValid": true,
+  "explanation": "This is a standard message from a registered sender (MwangazaPS) asking to pay school fees via KCB Paybill. No red flags detected. If unsure, contact the school directly."
+ },
+ {
+  "id": "kv1-0052",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0052",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1084.1765000000014,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA message from the registered sender. The message is about a new feature (Jumbe) and provides a link to learn more. No suspicious requests for personal information or money."
+ },
+ {
+  "id": "kv1-0052",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1081.5015999999887,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA Jumbe notification from the registered sender. There is no indication of fraud in the message. You can follow the instructions to learn more about Jumbe."
+ },
+ {
+  "id": "kv1-0053",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [
+   "S3"
+  ]
+ },
+ {
+  "id": "kv1-0053",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [
+   "S3"
+  ],
+  "ms": 1135.726999999999,
+  "jsonValid": true,
+  "explanation": "This is a normal message from a saved contact (Wambui Chama) asking to send 500 for a specific reason. If it feels unusual, call the contact on the saved number to verify."
+ },
+ {
+  "id": "kv1-0053",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "wrong_send_reversal",
+  "signals": [
+   "S3"
+  ],
+  "ms": 1223.5834999999934,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA receipt that says you sent money to someone else by mistake, but real mistakes are reversed by Safaricom through 456. Do not send money back."
+ },
+ {
+  "id": "kv1-0054",
+  "mode": "rules",
+  "level": "scam",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S6"
+  ]
+ },
+ {
+  "id": "kv1-0054",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S6"
+  ],
+  "ms": 1373.5331000000006,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA receipt sent from an ordinary phone number. The balance line is a known forgery sign. Check your real balance in the M-PESA app and do not send anything back."
+ },
+ {
+  "id": "kv1-0054",
+  "mode": "fused",
+  "level": "scam",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S6"
+  ],
+  "ms": 1412.7869999999966,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA receipt sent from an ordinary phone number, and the code is not in the correct format. Check your real balance in the M-PESA app and do not send anything back."
+ },
+ {
+  "id": "kv1-0056",
+  "mode": "rules",
+  "level": "suspicious",
+  "category": "wrong_send_reversal",
+  "signals": [
+   "S3",
+   "S4"
+  ]
+ },
+ {
+  "id": "kv1-0056",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [
+   "S3",
+   "S4"
+  ],
+  "ms": 1098.0308000000077,
+  "jsonValid": true,
+  "explanation": "This is a normal message from an unknown number, with no clear red flags. If you are not familiar with the sender, do not respond to unknown numbers. If you are stuck, contact your service provider directly."
+ },
+ {
+  "id": "kv1-0056",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "wrong_send_reversal",
+  "signals": [
+   "S3",
+   "S4"
+  ],
+  "ms": 1299.2773000000016,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA receipt that asks you to send money back, which is not how real mistakes are handled. The urgency is a red flag for scams."
+ },
+ {
+  "id": "kv1-0057",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0057",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1118.1235999999917,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message includes a valid transaction and balance, and the instruction to use Pochi la Biashara for separating funds is a standard feature. No suspicious elements detected."
+ },
+ {
+  "id": "kv1-0057",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1163.846000000005,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message includes a valid transaction and balance, and the instruction to use Pochi la Biashara is a standard practice for separating funds. No suspicious elements detected."
+ },
+ {
+  "id": "kv1-0058",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [
+   "S7"
+  ]
+ },
+ {
+  "id": "kv1-0058",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [
+   "S7"
+  ],
+  "ms": 1028.543399999995,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation. The message is from MPESA and confirms that your Fuliza balance has been paid. Check your M-PESA balance in the app to verify."
+ },
+ {
+  "id": "kv1-0058",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [
+   "S7"
+  ],
+  "ms": 1284.5255000000034,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA confirmation that does not follow the standard message format. M-PESA messages should specify whether the payment was received, sent, or for a paybill/till. This is a known sign of a forgery."
+ },
+ {
+  "id": "kv1-0059",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0059",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1178.3117000000057,
+  "jsonValid": true,
+  "explanation": "This is a normal message from a saved contact (Baraka) in Swahili, asking to use the 456 reversal code to reverse a mistaken transfer. If you are unsure, call Baraka on the saved number to confirm."
+ },
+ {
+  "id": "kv1-0059",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1179.8822999999975,
+  "jsonValid": true,
+  "explanation": "This is a normal message from a saved contact (Baraka) asking to send money via a specific number and to use the 456 code to reverse a transfer. If it feels unusual, call Baraka directly."
+ },
+ {
+  "id": "kv1-0060",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0060",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1144.2898999999888,
+  "jsonValid": true,
+  "explanation": "This is a normal rent reminder from a saved contact (Landlord Kamau). If it feels unusual, call the landlord directly to confirm. The message is in Swahili and seems legitimate."
+ },
+ {
+  "id": "kv1-0060",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1112.7985999999946,
+  "jsonValid": true,
+  "explanation": "This is a normal rent reminder from a saved contact (Landlord Kamau) using the usual Paybill number. If it feels unusual, call the landlord directly to confirm."
+ },
+ {
+  "id": "kv1-0062",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0062",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1065.0195999999996,
+  "jsonValid": true,
+  "explanation": "This is a genuine HELB message. The tuition and upkeep amounts are standard for the 2026/27 Semester 1. No action is needed as the money has already been sent."
+ },
+ {
+  "id": "kv1-0062",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 993.1465000000026,
+  "jsonValid": true,
+  "explanation": "This is a genuine HELB message from a registered sender. The loan details and payments align with known HELB processes. No red flags detected."
+ },
+ {
+  "id": "kv1-0063",
+  "mode": "rules",
+  "level": "suspicious",
+  "category": "lookalike_paybill",
+  "signals": [
+   "S4",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0063",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S4",
+   "S12"
+  ],
+  "ms": 1426.498700000011,
+  "jsonValid": true,
+  "explanation": "This is a fake offer for a TV deal. Real offers do not require payment to a personal number before they are confirmed. Check the offer on official channels and do not pay."
+ },
+ {
+  "id": "kv1-0063",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "lookalike_paybill",
+  "signals": [
+   "S4",
+   "S12"
+  ],
+  "ms": 1326.0426000000007,
+  "jsonValid": true,
+  "explanation": "This is a fake offer from a personal number, pushing urgency to act quickly. Real TV Kenya would use a registered sender name. Do not pay to a personal number."
+ },
+ {
+  "id": "kv1-0064",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "betting_tips",
+  "signals": [
+   "S10",
+   "S25",
+   "S17",
+   "S23",
+   "S19"
+  ]
+ },
+ {
+  "id": "kv1-0064",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "betting_tips",
+  "signals": [
+   "S10",
+   "S25",
+   "S17",
+   "S23",
+   "S19"
+  ],
+  "ms": 1522.8542000000016,
+  "jsonValid": true,
+  "explanation": "This is a betting tip scam offering false odds and asking you to pay for a VIP slip. The sender is likely a scammer trying to get your money. Do not pay and avoid sharing personal details."
+ },
+ {
+  "id": "kv1-0064",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "betting_tips",
+  "signals": [
+   "S10",
+   "S25",
+   "S17",
+   "S23",
+   "S19"
+  ],
+  "ms": 1568.2728999999963,
+  "jsonValid": true,
+  "explanation": "This is a scam for betting tips that asks you to pay upfront for a VIP slip. Genuine betting tips do not guarantee results, and businesses use registered paybills, not personal numbers. Do not pay."
+ },
+ {
+  "id": "kv1-0066",
+  "mode": "rules",
+  "level": "suspicious",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S17"
+  ]
+ },
+ {
+  "id": "kv1-0066",
+  "mode": "llm",
+  "level": "suspicious",
+  "category": "betting_tips",
+  "signals": [
+   "S17"
+  ],
+  "ms": 1398.0331000000006,
+  "jsonValid": true,
+  "explanation": "This is a suspicious offer to join a group that gets exclusive team news. The mention of a 'guy inside the club' and the '750 for the week' are red flags. Do not join without verifying the group's legitimacy."
+ },
+ {
+  "id": "kv1-0066",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S17"
+  ],
+  "ms": 1155.751099999994,
+  "jsonValid": true,
+  "explanation": "A real investment or tip service does not guarantee 9 out of 10 success rates. This is a scam asking you to join an investment or tip group."
+ },
+ {
+  "id": "kv1-0069",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "wrong_send_reversal",
+  "signals": [
+   "S3",
+   "S13",
+   "S4",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0069",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "wrong_send_reversal",
+  "signals": [
+   "S3",
+   "S13",
+   "S4",
+   "S12"
+  ],
+  "ms": 1500.8439999999973,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA reversal request from a personal number. Real reversals are handled through 456, not by the recipient sending money back. Do not send money to the number in the message."
+ },
+ {
+  "id": "kv1-0069",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "wrong_send_reversal",
+  "signals": [
+   "S3",
+   "S13",
+   "S4",
+   "S12"
+  ],
+  "ms": 1521.0037000000011,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA reversal message. Real mistakes are fixed by Safaricom through 456, not by you. Do not send money back and do not panic."
+ },
+ {
+  "id": "kv1-0070",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0070",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 959.346000000005,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message includes a valid transaction details and balance. No suspicious activity detected."
+ },
+ {
+  "id": "kv1-0070",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1012.2878999999957,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message confirms a payment from an account and shows the updated balance. No suspicious elements detected."
+ },
+ {
+  "id": "kv1-0072",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S4",
+   "S15",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0072",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S4",
+   "S15",
+   "S12"
+  ],
+  "ms": 1348.0185000000056,
+  "jsonValid": true,
+  "explanation": "This is a fake message from an unknown number pretending to be a school official. The message is trying to get you to provide bank account details to a fake 'Bursar' who is not authorized to access your bank information."
+ },
+ {
+  "id": "kv1-0072",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S4",
+   "S15",
+   "S12"
+  ],
+  "ms": 1506.5287000000098,
+  "jsonValid": true,
+  "explanation": "This is a fake message from a personal number pretending to be a school. It asks you to act quickly and redirect payments to a new number, which is a red flag. Call the school directly using a known number to verify."
+ },
+ {
+  "id": "kv1-0075",
+  "mode": "rules",
+  "level": "scam",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S11",
+   "S10",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0075",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S11",
+   "S10",
+   "S12"
+  ],
+  "ms": 1261.1870000000054,
+  "jsonValid": true,
+  "explanation": "This is a fake P2P crypto transaction. Binance Support does not ask for 2FA codes or wallet recovery phrases. Do not send this information."
+ },
+ {
+  "id": "kv1-0075",
+  "mode": "fused",
+  "level": "scam",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S11",
+   "S10",
+   "S12"
+  ],
+  "ms": 1352.3853999999992,
+  "jsonValid": true,
+  "explanation": "Binance support does not message you in P2P crypto chats. They never ask for your 2FA code or wallet recovery phrase. Do not send anything."
+ },
+ {
+  "id": "kv1-0079",
+  "mode": "rules",
+  "level": "scam",
+  "category": "relative_impersonation",
+  "signals": [
+   "S11",
+   "S4",
+   "S16"
+  ]
+ },
+ {
+  "id": "kv1-0079",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S11",
+   "S4",
+   "S16"
+  ],
+  "ms": 1310.6375000000116,
+  "jsonValid": true,
+  "explanation": "This is a fake message pretending to be a friend (Tonny) to get your phone number. The sender is impersonating someone you know to trick you into sharing personal information."
+ },
+ {
+  "id": "kv1-0079",
+  "mode": "fused",
+  "level": "scam",
+  "category": "relative_impersonation",
+  "signals": [
+   "S11",
+   "S4",
+   "S16"
+  ],
+  "ms": 1305.7561000000132,
+  "jsonValid": true,
+  "explanation": "This is a fake WhatsApp recovery request. Real Safaricom or bank staff do not ask for codes or seed phrases. Do not share any codes or personal information."
+ },
+ {
+  "id": "kv1-0080",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0080",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1073.121800000008,
+  "jsonValid": true,
+  "explanation": "This is a genuine Safaricom message. The data bundle is a real offer, and the instructions to dial *544# are correct. Check your data usage and balance through the Safaricom app or website for confirmation."
+ },
+ {
+  "id": "kv1-0080",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1010.0536000000138,
+  "jsonValid": true,
+  "explanation": "This is a genuine Safaricom SMS about a data bundle. No red flags detected. Check the message for any unusual requests and verify with Safaricom directly if unsure."
+ },
+ {
+  "id": "kv1-0083",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S4",
+   "S15",
+   "S16"
+  ]
+ },
+ {
+  "id": "kv1-0083",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S4",
+   "S15",
+   "S16"
+  ],
+  "ms": 1285.955100000021,
+  "jsonValid": true,
+  "explanation": "This is a fake message pretending to be a family member asking for money before the service is provided. Do not send money to a personal number unless you know the person."
+ },
+ {
+  "id": "kv1-0083",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S4",
+   "S15",
+   "S16"
+  ],
+  "ms": 1404.8335999999836,
+  "jsonValid": true,
+  "explanation": "This is a fake message pretending to be a family member, pushing urgency and asking you to send money to a new number. Call the person on a number you know to confirm the message is real."
+ },
+ {
+  "id": "kv1-0085",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0085",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1017.2803000000131,
+  "jsonValid": true,
+  "explanation": "This is a genuine Safaricom message about a SIM card replacement. If you did not request this, call 100 from another line to confirm. Do not share any details."
+ },
+ {
+  "id": "kv1-0085",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1045.5499999999884,
+  "jsonValid": true,
+  "explanation": "This is a genuine message from Safaricom about a SIM card replacement. If you did not request this, call 100 from another line to verify. The message is not suspicious."
+ },
+ {
+  "id": "kv1-0086",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "fake_prize",
+  "signals": [
+   "S4",
+   "S22",
+   "S9"
+  ]
+ },
+ {
+  "id": "kv1-0086",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_prize",
+  "signals": [
+   "S4",
+   "S22",
+   "S9"
+  ],
+  "ms": 1053.8629000000074,
+  "jsonValid": true,
+  "explanation": "This is a fake prize offer. Real promotions do not use shortened URLs. Do not click on the link and do not send any money."
+ },
+ {
+  "id": "kv1-0086",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "fake_prize",
+  "signals": [
+   "S4",
+   "S22",
+   "S9"
+  ],
+  "ms": 1279.1434000000008,
+  "jsonValid": true,
+  "explanation": "This is a fake prize notification that uses urgency and a shortened link to trick you into clicking. Do not click the link and do not send any money."
+ },
+ {
+  "id": "kv1-0087",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0087",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1091.1952000000165,
+  "jsonValid": true,
+  "explanation": "This is a normal message from a saved contact (Otis) asking if you are okay and mentioning a 500 shilling amount. If it feels unusual, call Otis directly to verify."
+ },
+ {
+  "id": "kv1-0087",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1125.1081000000122,
+  "jsonValid": true,
+  "explanation": "This is a normal message from a saved contact (Otis) asking if you're okay and mentioning a 500 shilling amount. If it feels unusual, call Otis directly to verify. There's no clear scam indicator here."
+ },
+ {
+  "id": "kv1-0088",
+  "mode": "rules",
+  "level": "scam",
+  "category": "fake_customer_care",
+  "signals": [
+   "S11",
+   "S25",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0088",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_customer_care",
+  "signals": [
+   "S11",
+   "S25",
+   "S12"
+  ],
+  "ms": 1780.5683999999892,
+  "jsonValid": true,
+  "explanation": "This is a fake Safaricom message that is trying to get your PIN. Real Safaricom will not ask for your PIN over the phone or via SMS. Call Safaricom directly on 0722***418 to verify."
+ },
+ {
+  "id": "kv1-0088",
+  "mode": "fused",
+  "level": "scam",
+  "category": "fake_customer_care",
+  "signals": [
+   "S11",
+   "S25",
+   "S12"
+  ],
+  "ms": 1496.4716999999946,
+  "jsonValid": true,
+  "explanation": "Safaricom does not ask for your PIN or request payments to personal numbers. The message is from an unknown sender and claims to be Safaricom, which is a red flag. Do not provide any personal information or send money."
+ },
+ {
+  "id": "kv1-0089",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0089",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1005.1615000000165,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA reversal notification. The system is informing you that a transaction reversal is in progress. Do not take any action unless you are sure about the transaction."
+ },
+ {
+  "id": "kv1-0089",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1101.0129999999772,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA reversal request from the registered sender MPESA. The message is from a known source and there are no signs of fraud. If you did not initiate the reversal, contact customer support to verify."
+ },
+ {
+  "id": "kv1-0090",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S10",
+   "S4",
+   "S24",
+   "S9",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0090",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S10",
+   "S4",
+   "S24",
+   "S9",
+   "S12"
+  ],
+  "ms": 1274.6450999999943,
+  "jsonValid": true,
+  "explanation": "A real Fuliza upgrade does not require a fee. The link is not from M-PESA and the fee is not free. Do not activate."
+ },
+ {
+  "id": "kv1-0090",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S10",
+   "S4",
+   "S24",
+   "S9",
+   "S12"
+  ],
+  "ms": 1470.7920999999915,
+  "jsonValid": true,
+  "explanation": "A real loan provider does not charge a fee to increase your limit. The website is not official, and the message is from a personal number. Do not pay the fee and check the website."
+ },
+ {
+  "id": "kv1-0091",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "government_impersonation",
+  "signals": [
+   "S10",
+   "S4",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0091",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "government_impersonation",
+  "signals": [
+   "S10",
+   "S4",
+   "S12"
+  ],
+  "ms": 1302.134699999995,
+  "jsonValid": true,
+  "explanation": "The eCitizen service does not ask for payment to a personal number for corrections. Contact the eCitizen office directly for any issues with your application."
+ },
+ {
+  "id": "kv1-0091",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "government_impersonation",
+  "signals": [
+   "S10",
+   "S4",
+   "S12"
+  ],
+  "ms": 1413.1817999999912,
+  "jsonValid": true,
+  "explanation": "A real organisation does not ask for payment upfront for a correction fee. The urgency and personal number are red flags. Check with eCitizen directly and do not pay."
+ },
+ {
+  "id": "kv1-0092",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S17",
+   "S20",
+   "S19"
+  ]
+ },
+ {
+  "id": "kv1-0092",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S17",
+   "S20",
+   "S19"
+  ],
+  "ms": 1175.6722000000009,
+  "jsonValid": true,
+  "explanation": "This is a high-risk investment offer that promises doubling returns in 6 weeks. Be cautious of such promises and do not share your details with strangers."
+ },
+ {
+  "id": "kv1-0092",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S17",
+   "S20",
+   "S19"
+  ],
+  "ms": 1319.7029999999795,
+  "jsonValid": true,
+  "explanation": "This is a crypto investment scam that promises high returns and asks you to send money to a fake platform. Do not send any USDT and avoid joining any group."
+ },
+ {
+  "id": "kv1-0093",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "betting_tips",
+  "signals": [
+   "S23",
+   "S9",
+   "S19"
+  ]
+ },
+ {
+  "id": "kv1-0093",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "betting_tips",
+  "signals": [
+   "S23",
+   "S9",
+   "S19"
+  ],
+  "ms": 1189.9781999999832,
+  "jsonValid": true,
+  "explanation": "This is a scam offering fake insider info for betting. You should not pay to get odds and should not join unknown Telegram channels."
+ },
+ {
+  "id": "kv1-0093",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "betting_tips",
+  "signals": [
+   "S23",
+   "S9",
+   "S19"
+  ],
+  "ms": 1242.8292000000074,
+  "jsonValid": true,
+  "explanation": "A real bookmaker does not offer guaranteed results for any game. The link could lead to a scam site. Do not click on the link or share your details."
+ },
+ {
+  "id": "kv1-0098",
+  "mode": "rules",
+  "level": "suspicious",
+  "category": "sim_swap",
+  "signals": [
+   "S4",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0098",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "sim_swap",
+  "signals": [
+   "S4",
+   "S12"
+  ],
+  "ms": 1098.4578000000038,
+  "jsonValid": true,
+  "explanation": "This is a sim swap scam. The number is trying to get your OTP or SIM replacement codes. Do not call back or pay anything. Check with your service provider directly."
+ },
+ {
+  "id": "kv1-0098",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "sim_swap",
+  "signals": [
+   "S4",
+   "S12"
+  ],
+  "ms": 1268.4151999999885,
+  "jsonValid": true,
+  "explanation": "This is a fake message from a personal number pretending to be Safaricom. Do not call back. Check your phone for real messages from Safaricom."
+ },
+ {
+  "id": "kv1-0100",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S10",
+   "S17",
+   "S19"
+  ]
+ },
+ {
+  "id": "kv1-0100",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S10",
+   "S17",
+   "S19"
+  ],
+  "ms": 1243.4306999999972,
+  "jsonValid": true,
+  "explanation": "This is a forex trading scam that promises high returns and asks for a monthly fee. Do not invest in unregulated trading and verify the coach's credentials."
+ },
+ {
+  "id": "kv1-0100",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S10",
+   "S17",
+   "S19"
+  ],
+  "ms": 1376.465899999981,
+  "jsonValid": true,
+  "explanation": "This is a fake investment offer that asks for upfront money and promises high returns. It also tries to get you to join a Telegram group. Do not send money and avoid the group."
+ },
+ {
+  "id": "kv1-0101",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0101",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1084.6455000000133,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender. The message includes the sender's name, the amount sent, the recipient's number, and the balance details. There are no signs of fraud in the message."
+ },
+ {
+  "id": "kv1-0101",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1053.5943999999727,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message provides a clear transaction details and balance information without any suspicious elements. No red flags were found in the message."
+ },
+ {
+  "id": "kv1-0102",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S15",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0102",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "lookalike_paybill",
+  "signals": [
+   "S15",
+   "S12"
+  ],
+  "ms": 1253.7788,
+  "jsonValid": true,
+  "explanation": "This is a fake KPLC message. Real KPLC will not give you a Paybill number. The 20% bonus is a red flag. Do not send money."
+ },
+ {
+  "id": "kv1-0102",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S15",
+   "S12"
+  ],
+  "ms": 1336.985799999995,
+  "jsonValid": true,
+  "explanation": "This is a fake KPLC message that is redirecting your payment to a new Paybill. Check with the real KPLC on the number you know before sending money."
+ },
+ {
+  "id": "kv1-0103",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S10",
+   "S17",
+   "S9",
+   "S19"
+  ]
+ },
+ {
+  "id": "kv1-0103",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S10",
+   "S17",
+   "S9",
+   "S19"
+  ],
+  "ms": 1272.705500000011,
+  "jsonValid": true,
+  "explanation": "This is a fake job offer that requires you to pay a fee to register, which is a common scam tactic. Do not pay and do not register."
+ },
+ {
+  "id": "kv1-0103",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S10",
+   "S17",
+   "S9",
+   "S19"
+  ],
+  "ms": 1330.9929999999877,
+  "jsonValid": true,
+  "explanation": "This is a fake job offer that asks for upfront payment and promises high returns. The shortened link and redirect to WhatsApp are red flags. Do not register or pay."
+ },
+ {
+  "id": "kv1-0105",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0105",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1357.4523000000045,
+  "jsonValid": true,
+  "explanation": "This is a genuine message from Safaricom. The Fibre bill is due, and you can pay it via M-PESA using the provided Paybill and account number. No action is needed unless you have a concern about the bill."
+ },
+ {
+  "id": "kv1-0105",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1129.2300999999861,
+  "jsonValid": true,
+  "explanation": "This is a genuine Safaricom Home Fibre bill notification. The sender is registered, and there are no obvious signs of fraud. You can proceed to pay via the provided M-PESA Paybill if you need to settle the bill."
+ },
+ {
+  "id": "kv1-0106",
+  "mode": "rules",
+  "level": "scam",
+  "category": "fake_customer_care",
+  "signals": [
+   "S11",
+   "S14",
+   "S13",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0106",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_customer_care",
+  "signals": [
+   "S11",
+   "S14",
+   "S13",
+   "S12"
+  ],
+  "ms": 1153.0924999999988,
+  "jsonValid": true,
+  "explanation": "Safaricom does not ask for PINs to verify transactions. This is a fake message from a scammer trying to get your PIN. Do not reply."
+ },
+ {
+  "id": "kv1-0106",
+  "mode": "fused",
+  "level": "scam",
+  "category": "fake_customer_care",
+  "signals": [
+   "S11",
+   "S14",
+   "S13",
+   "S12"
+  ],
+  "ms": 1539.910899999988,
+  "jsonValid": true,
+  "explanation": "This is a fake customer care message from a personal number. Safaricom never asks for your PIN or tells you to dial codes. Do not reply or dial anything. Check your phone for other suspicious messages."
+ },
+ {
+  "id": "kv1-0107",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S13",
+   "S15",
+   "S16"
+  ]
+ },
+ {
+  "id": "kv1-0107",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S13",
+   "S15",
+   "S16"
+  ],
+  "ms": 1521.556099999987,
+  "jsonValid": true,
+  "explanation": "This is a fake message pretending to be a family member and asking for money to get out of jail. Do not send money to a personal number. Call the number you know to confirm the situation."
+ },
+ {
+  "id": "kv1-0107",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S13",
+   "S15",
+   "S16"
+  ],
+  "ms": 1521.5405999999784,
+  "jsonValid": true,
+  "explanation": "This is a threat to force you to send money to a new number, pretending to be a family member. Call the person on a known number to confirm the situation before sending anything."
+ },
+ {
+  "id": "kv1-0108",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0108",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 957.1255999999994,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message includes a valid transaction and balance details. No suspicious elements detected."
+ },
+ {
+  "id": "kv1-0108",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1102.9032000000007,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message details the receipt of Ksh350.00 and shows the current balance. No suspicious elements were found in the message."
+ },
+ {
+  "id": "kv1-0111",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0111",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1217.9452999999921,
+  "jsonValid": true,
+  "explanation": "This is a genuine KRA message reminding you to pay the MRI (M-PESA Paybill 572572) by 20/11/26. The KRA is a registered sender, so this is a legitimate message. You should proceed to pay as instructed."
+ },
+ {
+  "id": "kv1-0111",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1219.9446999999927,
+  "jsonValid": true,
+  "explanation": "This is a genuine KRA message asking you to pay the MRI code for October before 20/11/26 via iTax or M-PESA Paybill 572572. The message is from a registered sender, so no red flags."
+ },
+ {
+  "id": "kv1-0114",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "job_scam",
+  "signals": [
+   "S10",
+   "S4",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0114",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "job_scam",
+  "signals": [
+   "S10",
+   "S4",
+   "S12"
+  ],
+  "ms": 1297.7055999999866,
+  "jsonValid": true,
+  "explanation": "A real employer does not ask you to pay fees to a personal number before you start. Check the agency on the NEA licensed list and do not pay."
+ },
+ {
+  "id": "kv1-0114",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "job_scam",
+  "signals": [
+   "S10",
+   "S4",
+   "S12"
+  ],
+  "ms": 1332.794499999989,
+  "jsonValid": true,
+  "explanation": "A real employer does not ask for fees before starting work. Urgent job offers from personal numbers are often scams. Do not pay and verify the employer through official channels."
+ },
+ {
+  "id": "kv1-0116",
+  "mode": "rules",
+  "level": "scam",
+  "category": "fake_prize",
+  "signals": [
+   "S11",
+   "S22",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0116",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S11",
+   "S22",
+   "S12"
+  ],
+  "ms": 1373.2198999999964,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA confirmation. The message is trying to get you to confirm with a phone number, which is a red flag. Do not respond."
+ },
+ {
+  "id": "kv1-0116",
+  "mode": "fused",
+  "level": "scam",
+  "category": "fake_prize",
+  "signals": [
+   "S11",
+   "S22",
+   "S12"
+  ],
+  "ms": 1609.921000000002,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA confirmation that says you won something you did not enter and asks for a secret. M-PESA messages should come from the official sender, not a personal number. Check your real balance in the M-PESA app and do not send anything back."
+ },
+ {
+  "id": "kv1-0117",
+  "mode": "rules",
+  "level": "suspicious",
+  "category": "romance_or_extortion",
+  "signals": [
+   "S13",
+   "S4"
+  ]
+ },
+ {
+  "id": "kv1-0117",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S13",
+   "S4"
+  ],
+  "ms": 1608.9519000000146,
+  "jsonValid": true,
+  "explanation": "This is a scam where the sender is asking for money for a video call and wants you to pay to a personal number. They also mention sharing personal information with family and friends on Facebook, which is a red flag. Do not send money and do not share personal information."
+ },
+ {
+  "id": "kv1-0117",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "romance_or_extortion",
+  "signals": [
+   "S13",
+   "S4"
+  ],
+  "ms": 1127.8001000000222,
+  "jsonValid": true,
+  "explanation": "This is a scam that threatens you with negative consequences if you don't act immediately. Do not send money or share personal information under pressure."
+ },
+ {
+  "id": "kv1-0120",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S13",
+   "S21"
+  ]
+ },
+ {
+  "id": "kv1-0120",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S13",
+   "S21"
+  ],
+  "ms": 1312.0102999999945,
+  "jsonValid": true,
+  "explanation": "The buyer is threatening to appeal and ban the seller's account if they don't mark the order as released. This is a common tactic in P2P crypto scams to force the seller to release funds before the payment is confirmed."
+ },
+ {
+  "id": "kv1-0120",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S13",
+   "S21"
+  ],
+  "ms": 1194.466700000019,
+  "jsonValid": true,
+  "explanation": "The buyer is threatening you to act quickly to avoid being banned, which is a scam tactic. Wait for the M-PESA confirmation before releasing crypto."
+ },
+ {
+  "id": "kv1-0123",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "betting_tips",
+  "signals": [
+   "S10",
+   "S17",
+   "S23",
+   "S9"
+  ]
+ },
+ {
+  "id": "kv1-0123",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S10",
+   "S17",
+   "S23",
+   "S9"
+  ],
+  "ms": 1086.359300000011,
+  "jsonValid": true,
+  "explanation": "This is a scam offering a fake app with no real accuracy. Do not download or pay for it. The app is likely a phishing tool."
+ },
+ {
+  "id": "kv1-0123",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "betting_tips",
+  "signals": [
+   "S10",
+   "S17",
+   "S23",
+   "S9"
+  ],
+  "ms": 1430.2465000000084,
+  "jsonValid": true,
+  "explanation": "This is a fake app that promises guaranteed betting results and asks for money upfront. Do not download apps from unverified sites and do not pay for guaranteed outcomes."
+ },
+ {
+  "id": "kv1-0124",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S10",
+   "S15"
+  ]
+ },
+ {
+  "id": "kv1-0124",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "job_scam",
+  "signals": [
+   "S10",
+   "S15"
+  ],
+  "ms": 1130.592399999994,
+  "jsonValid": true,
+  "explanation": "This is a job offer that asks for payment for a job and uses a personal number. Do not send your name or money to strangers."
+ },
+ {
+  "id": "kv1-0124",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S10",
+   "S15"
+  ],
+  "ms": 1371.350999999995,
+  "jsonValid": true,
+  "explanation": "This is a job offer that asks for a fee upfront, which is not normal. Also, it asks you to send money to a new number, which is suspicious. Do not pay and call the person on a known number to verify."
+ },
+ {
+  "id": "kv1-0125",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "government_impersonation",
+  "signals": [
+   "S25",
+   "S13",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0125",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "government_impersonation",
+  "signals": [
+   "S25",
+   "S13",
+   "S12"
+  ],
+  "ms": 1384.4222000000009,
+  "jsonValid": true,
+  "explanation": "This is a fake KRA message pretending to be the Kenya Revenue Authority. Real KRA will not ask for payments to personal numbers or threaten arrest. Contact KRA directly for any issues."
+ },
+ {
+  "id": "kv1-0125",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "government_impersonation",
+  "signals": [
+   "S25",
+   "S13",
+   "S12"
+  ],
+  "ms": 1529.8501000000106,
+  "jsonValid": true,
+  "explanation": "This is a fake KRA message from a personal number, not a registered organisation. Do not pay to a personal number and do not fear threats from unknown senders. Check with KRA directly."
+ },
+ {
+  "id": "kv1-0126",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0126",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 977.3602000000246,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message shows a clear transaction with a specific sender and balance. No suspicious elements detected."
+ },
+ {
+  "id": "kv1-0126",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1002.3029000000097,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message shows a clear transaction with a specific sender and balance. No suspicious elements detected."
+ },
+ {
+  "id": "kv1-0129",
+  "mode": "rules",
+  "level": "scam",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S2",
+   "S7",
+   "S7",
+   "S8"
+  ]
+ },
+ {
+  "id": "kv1-0129",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S2",
+   "S7",
+   "S7",
+   "S8"
+  ],
+  "ms": 1263.3897999999754,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA receipt sent from an ordinary phone number, and the balance line is a known forgery sign. Check your real balance in the M-PESA app and do not send anything back."
+ },
+ {
+  "id": "kv1-0129",
+  "mode": "fused",
+  "level": "scam",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S2",
+   "S7",
+   "S7",
+   "S8"
+  ],
+  "ms": 1663.198000000004,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA receipt sent from an ordinary phone number, and the balance line is a known forgery sign. Check your real balance in the M-PESA app and do not send anything back."
+ },
+ {
+  "id": "kv1-0130",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0130",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1222.6639999999898,
+  "jsonValid": true,
+  "explanation": "This is a P2P crypto transaction that is not yet complete. The buyer has not paid yet, so you should not send the goods until the payment is confirmed. Wait for the payment confirmation from Binance."
+ },
+ {
+  "id": "kv1-0130",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1057.1046999999962,
+  "jsonValid": true,
+  "explanation": "This is a genuine Binance P2P order notification. The sender is Binance, and the message is about a buyer's payment. No suspicious activity detected."
+ },
+ {
+  "id": "kv1-0131",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0131",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 999.706199999986,
+  "jsonValid": true,
+  "explanation": "This is a genuine KPLC bill from a registered sender. The Paybill number and account number match the ones on file. No red flags detected."
+ },
+ {
+  "id": "kv1-0131",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1075.5461000000068,
+  "jsonValid": true,
+  "explanation": "This is a genuine KPLC bill notification from a registered sender. The message is in Swahili and provides clear details about the bill and payment method. No suspicious elements were found in the message."
+ },
+ {
+  "id": "kv1-0134",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0134",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1232.0472000000009,
+  "jsonValid": true,
+  "explanation": "The message is a genuine M-PESA confirmation. The transaction cost is a standard part of any withdrawal. The daily transaction limit is a normal detail provided by M-PESA."
+ },
+ {
+  "id": "kv1-0134",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1077.8877000000211,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message provides details of a transaction and the current balance. There are no signs of fraud in the message."
+ },
+ {
+  "id": "kv1-0136",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0136",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_mpesa_confirmation",
+  "signals": [],
+  "ms": 1400.8090000000084,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA loan confirmation. The amount due is higher than the loan, and the date is in the future, which is not typical for a real loan. Check your M-PESA balance and do not send money."
+ },
+ {
+  "id": "kv1-0136",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1195.5195999999996,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA loan confirmation from KCB. The message is from a registered sender, and there are no obvious signs of fraud. However, it's important to verify the loan details through the KCB M-PESA app or customer service to ensure accuracy."
+ },
+ {
+  "id": "kv1-0138",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "fake_customer_care",
+  "signals": [
+   "S10",
+   "S25",
+   "S13",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0138",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "government_impersonation",
+  "signals": [
+   "S10",
+   "S25",
+   "S13",
+   "S12"
+  ],
+  "ms": 1298.7581000000064,
+  "jsonValid": true,
+  "explanation": "This is a fake government alert pretending to be a police inspector. You are not required to pay a bond to avoid arrest. Contact the police directly if you are worried."
+ },
+ {
+  "id": "kv1-0138",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "fake_customer_care",
+  "signals": [
+   "S10",
+   "S25",
+   "S13",
+   "S12"
+  ],
+  "ms": 1470.753000000026,
+  "jsonValid": true,
+  "explanation": "A real authority does not ask for a fee to avoid arrest. Do not pay to a personal number and call DCI directly to confirm the issue."
+ },
+ {
+  "id": "kv1-0141",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "wrong_send_reversal",
+  "signals": [
+   "S3",
+   "S4",
+   "S16"
+  ]
+ },
+ {
+  "id": "kv1-0141",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S3",
+   "S4",
+   "S16"
+  ],
+  "ms": 1908.5007000000041,
+  "jsonValid": true,
+  "explanation": "This is a fake message asking you to send money to a personal number. The mention of a relative in a strange context is a red flag. Do not send money to strangers and verify the request with a trusted person."
+ },
+ {
+  "id": "kv1-0141",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "wrong_send_reversal",
+  "signals": [
+   "S3",
+   "S4",
+   "S16"
+  ],
+  "ms": 1554.5070000000123,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA receipt that asks you to send money back yourself, which is not how real mistaken transfers are handled. The message also uses urgency and claims to be someone close, but the number is not in your contacts."
+ },
+ {
+  "id": "kv1-0142",
+  "mode": "rules",
+  "level": "suspicious",
+  "category": "relative_impersonation",
+  "signals": [
+   "S15"
+  ]
+ },
+ {
+  "id": "kv1-0142",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S15"
+  ],
+  "ms": 1373.1275000000023,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA confirmation from an unknown number. The message mentions a phone number and name not in contacts, which is a sign of a scam. Do not send any money."
+ },
+ {
+  "id": "kv1-0142",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S15"
+  ],
+  "ms": 1239.91320000001,
+  "jsonValid": true,
+  "explanation": "This is a relative impersonation scam where the sender is asking to redirect payments to a new number. Verify the request by calling the person on a number you already know."
+ },
+ {
+  "id": "kv1-0143",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S25",
+   "S16",
+   "S19"
+  ]
+ },
+ {
+  "id": "kv1-0143",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S25",
+   "S16",
+   "S19"
+  ],
+  "ms": 1584.0799999999872,
+  "jsonValid": true,
+  "explanation": "This is a scam asking you to install a spyware app and pay for it. Do not install apps from unknown numbers and do not click on links."
+ },
+ {
+  "id": "kv1-0143",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S25",
+   "S16",
+   "S19"
+  ],
+  "ms": 1485.5929999999935,
+  "jsonValid": true,
+  "explanation": "This is a scam that asks you to pay a personal number for a service, pretends to be someone close, and tries to get you into another channel. Do not pay and do not follow the link."
+ },
+ {
+  "id": "kv1-0144",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0144",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1238.3160999999964,
+  "jsonValid": true,
+  "explanation": "This is a normal appointment confirmation from a clinic. If you are unsure, call the clinic directly using a number you recognize. If the number is not in your contacts, it might be a scam, but the message itself does not indicate any red flags."
+ },
+ {
+  "id": "kv1-0144",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1075.7917000000016,
+  "jsonValid": true,
+  "explanation": "This is a regular appointment confirmation from an unknown number, with nothing unusual in the message. If you are unsure, call the clinic directly using a known number to verify."
+ },
+ {
+  "id": "kv1-0145",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "betting_tips",
+  "signals": [
+   "S17",
+   "S23",
+   "S9",
+   "S19"
+  ]
+ },
+ {
+  "id": "kv1-0145",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S17",
+   "S23",
+   "S9",
+   "S19"
+  ],
+  "ms": 1349.7511999999988,
+  "jsonValid": true,
+  "explanation": "This is a fake investment opportunity that promises guaranteed profits from forex. Do not invest in unregulated forex trading and avoid sharing personal details."
+ },
+ {
+  "id": "kv1-0145",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "betting_tips",
+  "signals": [
+   "S17",
+   "S23",
+   "S9",
+   "S19"
+  ],
+  "ms": 1450.6154999999853,
+  "jsonValid": true,
+  "explanation": "This is a fake investment or crypto tip that promises 100% guaranteed profits and uses a shortened link to hide its true destination. Do not invest in unverified schemes."
+ },
+ {
+  "id": "kv1-0150",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0150",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1087.2917999999772,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender. The balance and transaction details are standard and do not indicate any scam. No urgent actions or suspicious requests are mentioned."
+ },
+ {
+  "id": "kv1-0150",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1143.612599999993,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message provides a clear transaction details and balance information without any suspicious elements. No red flags were found in the message."
+ },
+ {
+  "id": "kv1-0151",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0151",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 983.6032000000123,
+  "jsonValid": true,
+  "explanation": "This is a genuine KCB message. The code is for verification, and they will not call to ask for it. The message is standard and no action is needed."
+ },
+ {
+  "id": "kv1-0151",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1086.579700000002,
+  "jsonValid": true,
+  "explanation": "This is a genuine KCB message with a verification code. The sender is registered, and there's no indication of fraud. Do not share the code and check the sender's name in the app."
+ },
+ {
+  "id": "kv1-0152",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0152",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1067.9340000000084,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender. The message includes a transaction confirmation, payment details, and balance information. There are no signs of fraud in the message."
+ },
+ {
+  "id": "kv1-0152",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1034.458500000008,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message includes a valid transaction details and balance information. No suspicious elements detected."
+ },
+ {
+  "id": "kv1-0157",
+  "mode": "rules",
+  "level": "scam",
+  "category": "relative_impersonation",
+  "signals": [
+   "S11",
+   "S4",
+   "S16",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0157",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_customer_care",
+  "signals": [
+   "S11",
+   "S4",
+   "S16",
+   "S12"
+  ],
+  "ms": 1222.7446000000054,
+  "jsonValid": true,
+  "explanation": "This is a fake customer care message pretending to be Safaricom. They are asking for your PIN, which is a known red flag. Do not share your PIN with anyone."
+ },
+ {
+  "id": "kv1-0157",
+  "mode": "fused",
+  "level": "scam",
+  "category": "relative_impersonation",
+  "signals": [
+   "S11",
+   "S4",
+   "S16",
+   "S12"
+  ],
+  "ms": 1815.949499999988,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA message that asks for your PIN, which is not requested by real M-PESA. The sender is not in your contacts, and the message is urgent. Do not share your PIN and verify the sender through official channels."
+ },
+ {
+  "id": "kv1-0160",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S15",
+   "S16"
+  ]
+ },
+ {
+  "id": "kv1-0160",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [
+   "S15",
+   "S16"
+  ],
+  "ms": 1066.6008999999904,
+  "jsonValid": true,
+  "explanation": "This is a normal message from an unknown number, using Swahili and Sheng. It's a personal message about changing numbers and not a scam. If you don't know the sender, don't respond."
+ },
+ {
+  "id": "kv1-0160",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S15",
+   "S16"
+  ],
+  "ms": 1305.8891000000003,
+  "jsonValid": true,
+  "explanation": "This is a message that tries to redirect your payment to a new number and claims to be someone close, but the number is not in your contacts. Verify the number by calling the person directly."
+ },
+ {
+  "id": "kv1-0162",
+  "mode": "rules",
+  "level": "scam",
+  "category": "sim_swap",
+  "signals": [
+   "S11",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0162",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_customer_care",
+  "signals": [
+   "S11",
+   "S12"
+  ],
+  "ms": 1153.8883999999962,
+  "jsonValid": true,
+  "explanation": "Equity Bank is not a real bank. Real banks do not ask for OTPs to block logins. Contact Equity Bank directly for security issues."
+ },
+ {
+  "id": "kv1-0162",
+  "mode": "fused",
+  "level": "scam",
+  "category": "sim_swap",
+  "signals": [
+   "S11",
+   "S12"
+  ],
+  "ms": 1234.6924,
+  "jsonValid": true,
+  "explanation": "Equity Bank does not use personal numbers for communications. They would not ask for your OTP. Do not reply with the OTP."
+ },
+ {
+  "id": "kv1-0163",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "fake_prize",
+  "signals": [
+   "S10",
+   "S16",
+   "S22"
+  ]
+ },
+ {
+  "id": "kv1-0163",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S10",
+   "S16",
+   "S22"
+  ],
+  "ms": 1517.9962999999989,
+  "jsonValid": true,
+  "explanation": "This message is suspicious as it mentions money and M-PESA, and it refers to a company for travel. The mention of a payment for a 'bima' (loan) is a red flag. Do not send money or share personal information."
+ },
+ {
+  "id": "kv1-0163",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "fake_prize",
+  "signals": [
+   "S10",
+   "S16",
+   "S22"
+  ],
+  "ms": 1454.2693999999901,
+  "jsonValid": true,
+  "explanation": "This is a fake prize notification that asks for money upfront. It pretends to be someone close but comes from an unknown number. Do not send money to strangers."
+ },
+ {
+  "id": "kv1-0164",
+  "mode": "rules",
+  "level": "suspicious",
+  "category": "relative_impersonation",
+  "signals": [
+   "S4",
+   "S16"
+  ]
+ },
+ {
+  "id": "kv1-0164",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [
+   "S4",
+   "S16"
+  ],
+  "ms": 1323.2056000000157,
+  "jsonValid": true,
+  "explanation": "This is a normal message from a contact (Babe) in Swahili, asking for money. If it feels unusual, call the number directly to verify. The message is in Swahili and seems to be a request for money, but there's no clear red flag indicating it's a scam."
+ },
+ {
+  "id": "kv1-0164",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S4",
+   "S16"
+  ],
+  "ms": 1394.9695000000065,
+  "jsonValid": true,
+  "explanation": "This is a scam that uses emotional pressure and pretends to be someone close. Do not send money without verifying the sender's identity."
+ },
+ {
+  "id": "kv1-0165",
+  "mode": "rules",
+  "level": "scam",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S6",
+   "S7",
+   "S16"
+  ]
+ },
+ {
+  "id": "kv1-0165",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S6",
+   "S7",
+   "S16"
+  ],
+  "ms": 1371.9948999999906,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA confirmation from an unknown number. The line about the daily transaction limit is a known red flag for fake messages. Do not send any money back."
+ },
+ {
+  "id": "kv1-0165",
+  "mode": "fused",
+  "level": "scam",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S6",
+   "S7",
+   "S16"
+  ],
+  "ms": 1737.698699999979,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA receipt sent from an ordinary phone number, and it lacks the usual transaction code and cost details. Do not send anything back."
+ },
+ {
+  "id": "kv1-0167",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S13",
+   "S4",
+   "S21"
+  ]
+ },
+ {
+  "id": "kv1-0167",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S13",
+   "S4",
+   "S21"
+  ],
+  "ms": 1280.0828000000038,
+  "jsonValid": true,
+  "explanation": "The buyer is trying to get you to release the crypto before it is actually in your account. This is a common p2p payment fraud tactic. Do not release the crypto until you have seen the payment confirmation from M-PESA."
+ },
+ {
+  "id": "kv1-0167",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "p2p_payment_fraud",
+  "signals": [
+   "S13",
+   "S4",
+   "S21"
+  ],
+  "ms": 1373.7168999999994,
+  "jsonValid": true,
+  "explanation": "This is a P2P crypto fraud trying to get you to release crypto before the money is confirmed. The message uses urgency and threats to pressure you. Check your own MPESA SMS first."
+ },
+ {
+  "id": "kv1-0168",
+  "mode": "rules",
+  "level": "suspicious",
+  "category": "fake_customer_care",
+  "signals": [
+   "S18",
+   "S9"
+  ]
+ },
+ {
+  "id": "kv1-0168",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_prize",
+  "signals": [
+   "S18",
+   "S9"
+  ],
+  "ms": 1298.9886000000115,
+  "jsonValid": true,
+  "explanation": "This is a fake prize offer that asks you to share a link for a reward. Real businesses do not ask for personal numbers to distribute vouchers. Check the business on the official list and do not share links."
+ },
+ {
+  "id": "kv1-0168",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S18",
+   "S9"
+  ],
+  "ms": 1171.6166000000085,
+  "jsonValid": true,
+  "explanation": "This is a pyramid scheme where you are paid to refer others, and the link is to an unverified site. Do not share the link and do not pay."
+ },
+ {
+  "id": "kv1-0169",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0169",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1045.929999999993,
+  "jsonValid": true,
+  "explanation": "This is a genuine KPLC electricity bill with a token and charges. The message is from a registered sender, so it is not a scam. Check the details against your account to confirm."
+ },
+ {
+  "id": "kv1-0169",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1070.2225999999791,
+  "jsonValid": true,
+  "explanation": "This is a genuine KPLC electricity bill with a token and charges. The message is from a registered sender, so it's likely a real bill. Check the details against your account to confirm."
+ },
+ {
+  "id": "kv1-0170",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0170",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1016.609999999986,
+  "jsonValid": true,
+  "explanation": "This is a normal message from a buyer in a P2P crypto transaction. The buyer is asking the seller to confirm the payment before proceeding. There is no indication of fraud in this message."
+ },
+ {
+  "id": "kv1-0170",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1002.530299999984,
+  "jsonValid": true,
+  "explanation": "This is a normal message from a buyer in a P2P crypto transaction, asking to confirm the payment before proceeding. There are no suspicious signs in the message."
+ },
+ {
+  "id": "kv1-0171",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S10",
+   "S25",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0171",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "government_impersonation",
+  "signals": [
+   "S10",
+   "S25",
+   "S12"
+  ],
+  "ms": 1226.3327999999747,
+  "jsonValid": true,
+  "explanation": "This is a fake message from an impersonator pretending to be HELB. Do not pay any fees to a personal number. Check with HELB directly for official information."
+ },
+ {
+  "id": "kv1-0171",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S10",
+   "S25",
+   "S12"
+  ],
+  "ms": 1528.2650999999605,
+  "jsonValid": true,
+  "explanation": "A real loan organisation does not ask for upfront fees. Paying to a personal number is a red flag. The message claims to be from HELB but comes from a personal number. Check with HELB directly and do not pay."
+ },
+ {
+  "id": "kv1-0173",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0173",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1112.5793000000413,
+  "jsonValid": true,
+  "explanation": "This is a regular message from a saved contact (Uncle Joe) about a money market fund. It does not contain any clear red flags. If you are unsure, you can call Uncle Joe on the saved number to confirm."
+ },
+ {
+  "id": "kv1-0173",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1099.0450999999885,
+  "jsonValid": true,
+  "explanation": "This is a regular message from a saved contact (Uncle Joe) about a money market fund, with nothing unusual in it. If it feels out of character, call him on the number you know before sending."
+ },
+ {
+  "id": "kv1-0175",
+  "mode": "rules",
+  "level": "scam",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S8"
+  ]
+ },
+ {
+  "id": "kv1-0175",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S8"
+  ],
+  "ms": 1491.4898000000394,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA confirmation. The amount shown (Ksh10,385.00) does not match the stated transaction (Ksh10,000.00). The sender and receiver numbers are the same, which is suspicious. Do not send money back or confirm the transaction."
+ },
+ {
+  "id": "kv1-0175",
+  "mode": "fused",
+  "level": "scam",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S8"
+  ],
+  "ms": 1312.1310999999987,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA receipt sent from an ordinary phone number, and the full number is a sign that it is not real. Check your real balance in the M-PESA app and do not send anything back."
+ },
+ {
+  "id": "kv1-0176",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0176",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1069.910899999959,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-Shwari confirmation with no suspicious elements. The sender is M-Shwari, and the transaction details are clear and standard. No urgent requests or unusual instructions are present."
+ },
+ {
+  "id": "kv1-0176",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1084.8046999999788,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-Shwari confirmation from the registered sender. The message includes a transfer confirmation and balances, with no signs of forgery or scam indicators. No red flags detected."
+ },
+ {
+  "id": "kv1-0177",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "government_impersonation",
+  "signals": [
+   "S25",
+   "S13",
+   "S4",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0177",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_prize",
+  "signals": [
+   "S25",
+   "S13",
+   "S4",
+   "S12"
+  ],
+  "ms": 1609.9811000000336,
+  "jsonValid": true,
+  "explanation": "This is a fake message from an unknown number pretending to be a hospital. The message is a known scam that asks you to pay for a service that is not real. Do not send money to unknown numbers."
+ },
+ {
+  "id": "kv1-0177",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "government_impersonation",
+  "signals": [
+   "S25",
+   "S13",
+   "S4",
+   "S12"
+  ],
+  "ms": 1587.9956000000238,
+  "jsonValid": true,
+  "explanation": "This is a fake message from SHA asking you to pay a personal number, which is not how official agencies operate. Do not pay and verify the message through official channels."
+ },
+ {
+  "id": "kv1-0180",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0180",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_loan_or_fuliza",
+  "signals": [],
+  "ms": 1257.2445999999763,
+  "jsonValid": true,
+  "explanation": "This is a fake loan offer from KCB. Real KCB loans are only available through their official website or mobile app. Do not send money to a fake loan offer."
+ },
+ {
+  "id": "kv1-0180",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 962.3172999999952,
+  "jsonValid": true,
+  "explanation": "This is a genuine salary credit from KCB, and the loan offer is a standard M-PESA service. No red flags detected."
+ },
+ {
+  "id": "kv1-0181",
+  "mode": "rules",
+  "level": "scam",
+  "category": "fake_customer_care",
+  "signals": [
+   "S11",
+   "S13",
+   "S9",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0181",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S11",
+   "S13",
+   "S9",
+   "S12"
+  ],
+  "ms": 1260.7245000000112,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA confirmation. The message is a known scam that asks for your PIN to 'fix' a problem. Do not share your PIN with anyone."
+ },
+ {
+  "id": "kv1-0181",
+  "mode": "fused",
+  "level": "scam",
+  "category": "fake_customer_care",
+  "signals": [
+   "S11",
+   "S13",
+   "S9",
+   "S12"
+  ],
+  "ms": 1534.7428000000073,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA message that asks for your PIN, threatens you, and links to a fake website. Do not share your PIN or visit the website. Check your M-PESA balance through the official app."
+ },
+ {
+  "id": "kv1-0183",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0183",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1061.2686000000103,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message includes a transaction details and balance information which are standard for M-PESA. No suspicious activity is detected."
+ },
+ {
+  "id": "kv1-0183",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1022.8046000000322,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from the registered sender MPESA. The message includes a valid transaction details and balance information. No suspicious elements detected."
+ },
+ {
+  "id": "kv1-0184",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0184",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1119.9076999999816,
+  "jsonValid": true,
+  "explanation": "This is a standard message from an unknown number, asking if it's still your number. It's not a scam as there's no request for money or personal information. If you're unsure, you can call the number directly to verify."
+ },
+ {
+  "id": "kv1-0184",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1109.955100000021,
+  "jsonValid": true,
+  "explanation": "This is a standard message from an unknown number, asking if it's still your number. It's not a scam as there's no indication of fraud or urgency. If unsure, call back using a known number."
+ },
+ {
+  "id": "kv1-0185",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0185",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "p2p_payment_fraud",
+  "signals": [],
+  "ms": 1375.1221999999834,
+  "jsonValid": true,
+  "explanation": "This is a P2P crypto payment fraud. The sender is pretending to have sent money via M-Pesa and is asking you to release the funds before they are actually in your account. Do not release the funds until you confirm the transaction through the M-PESA app."
+ },
+ {
+  "id": "kv1-0185",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1220.208099999989,
+  "jsonValid": true,
+  "explanation": "This is a normal message from a buyer in a P2P crypto order chat. The sender says they sent money via M-Pesa and asks the recipient to release it when it reflects. No red flags detected."
+ },
+ {
+  "id": "kv1-0188",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S13",
+   "S15"
+  ]
+ },
+ {
+  "id": "kv1-0188",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [
+   "S13",
+   "S15"
+  ],
+  "ms": 1140.5422000000253,
+  "jsonValid": true,
+  "explanation": "This is a normal message about a paybill change from a saved contact (Rongai) in his usual way, with nothing unusual in it. If it feels out of character, call him on the number you know before sending."
+ },
+ {
+  "id": "kv1-0188",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S13",
+   "S15"
+  ],
+  "ms": 1333.1023000000278,
+  "jsonValid": true,
+  "explanation": "This message is trying to pressure you into acting quickly and redirecting your payment to a new number, which is suspicious. Contact the person directly using a known number to verify the request."
+ },
+ {
+  "id": "kv1-0191",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S17",
+   "S18",
+   "S20",
+   "S9"
+  ]
+ },
+ {
+  "id": "kv1-0191",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S17",
+   "S18",
+   "S20",
+   "S9"
+  ],
+  "ms": 1178.2367000000086,
+  "jsonValid": true,
+  "explanation": "This is a crypto investment scam that promises high returns with no effort. Do not click on the link and do not send any USDT."
+ },
+ {
+  "id": "kv1-0191",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S17",
+   "S18",
+   "S20",
+   "S9"
+  ],
+  "ms": 1525.8568000000087,
+  "jsonValid": true,
+  "explanation": "This is a fake investment or crypto tip scheme that promises high returns and pays to recruit others. Genuine investments do not offer such guaranteed returns. Do not send any crypto to the platform or share your details."
+ },
+ {
+  "id": "kv1-0192",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": []
+ },
+ {
+  "id": "kv1-0192",
+  "mode": "llm",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 994.545299999998,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from Equity Bank. The sender is registered, and the message is in the correct format. No red flags detected."
+ },
+ {
+  "id": "kv1-0192",
+  "mode": "fused",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [],
+  "ms": 1069.4614000000292,
+  "jsonValid": true,
+  "explanation": "This is a genuine M-PESA confirmation from Equity Bank. The sender is registered, and there are no signs of forgery. Check your account balance through the Equity Bank app for confirmation."
+ },
+ {
+  "id": "kv1-0196",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "wrong_send_reversal",
+  "signals": [
+   "S3",
+   "S4",
+   "S16"
+  ]
+ },
+ {
+  "id": "kv1-0196",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S3",
+   "S4",
+   "S16"
+  ],
+  "ms": 1340.4339000000036,
+  "jsonValid": true,
+  "explanation": "This is a fake message pretending to be a family member asking you to send money back. The sender is using a personal number, which is a red flag. Do not send money to strangers."
+ },
+ {
+  "id": "kv1-0196",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "wrong_send_reversal",
+  "signals": [
+   "S3",
+   "S4",
+   "S16"
+  ],
+  "ms": 1472.7969999999623,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA receipt that says money was sent to you by mistake, but real mistakes are reversed by Safaricom through 456. Do not send money back and check the number."
+ },
+ {
+  "id": "kv1-0197",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S4",
+   "S16",
+   "S24",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0197",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S4",
+   "S16",
+   "S24",
+   "S12"
+  ],
+  "ms": 1412.3952999999747,
+  "jsonValid": true,
+  "explanation": "This is a fake loan offer that asks for your ID and M-PESA code to process a higher limit. Real Fuliza does not require a fee or personal details to increase your limit. Check with Safaricom directly."
+ },
+ {
+  "id": "kv1-0197",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S4",
+   "S16",
+   "S24",
+   "S12"
+  ],
+  "ms": 1647.2002999999677,
+  "jsonValid": true,
+  "explanation": "This is a fake loan or Fuliza scam. The sender pretends to be someone close and offers to increase your loan limit for a fee, but this is not how Fuliza works. Do not pay for a limit increase."
+ },
+ {
+  "id": "kv1-0200",
+  "mode": "rules",
+  "level": "suspicious",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0200",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S12"
+  ],
+  "ms": 1337.8282999999938,
+  "jsonValid": true,
+  "explanation": "This is a fake M-Shwari loan offer. Real M-Shwari loans require a formal application through the app. Do not reply with YES."
+ },
+ {
+  "id": "kv1-0200",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "fake_loan_or_fuliza",
+  "signals": [
+   "S12"
+  ],
+  "ms": 1234.7006999999867,
+  "jsonValid": true,
+  "explanation": "This is a fake M-Shwari loan notification from a personal number. M-Shwari uses a registered sender name, not personal numbers. Do not reply to confirm."
+ },
+ {
+  "id": "kv1-0202",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S15",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0202",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "lookalike_paybill",
+  "signals": [
+   "S15",
+   "S12"
+  ],
+  "ms": 1367.5683999999892,
+  "jsonValid": true,
+  "explanation": "This is a fake message asking you to pay for a service you did not receive. The Paybill number is not for Nairobi Water Sewerage. Do not pay."
+ },
+ {
+  "id": "kv1-0202",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "relative_impersonation",
+  "signals": [
+   "S15",
+   "S12"
+  ],
+  "ms": 1446.1558000000077,
+  "jsonValid": true,
+  "explanation": "This is a fake message from an organisation pretending to be Wateja wa Maji Nairobi. The message is asking you to change your Paybill number, but the sender is a personal number. Confirm by calling the organisation directly."
+ },
+ {
+  "id": "kv1-0203",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S13",
+   "S4",
+   "S20",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0203",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S13",
+   "S4",
+   "S20",
+   "S12"
+  ],
+  "ms": 1386.098399999959,
+  "jsonValid": true,
+  "explanation": "This is a fake investment or crypto scam. You are being asked to send money to a crypto address to avoid freezing your own funds, which is a common scam tactic. Do not send any money to unknown addresses."
+ },
+ {
+  "id": "kv1-0203",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S13",
+   "S4",
+   "S20",
+   "S12"
+  ],
+  "ms": 1605.8505000000005,
+  "jsonValid": true,
+  "explanation": "This is a fake investment alert that threatens to freeze your funds if you don't act quickly. Genuine companies do not ask for urgent payments into personal addresses. Check the sender's legitimacy and do not send USDT."
+ },
+ {
+  "id": "kv1-0204",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S13",
+   "S4",
+   "S17",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0204",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_customer_care",
+  "signals": [
+   "S13",
+   "S4",
+   "S17",
+   "S12"
+  ],
+  "ms": 1105.9489000000176,
+  "jsonValid": true,
+  "explanation": "This is a fake Safaricom message. Safaricom does not ask for your details over the phone. Do not call the number in the message."
+ },
+ {
+  "id": "kv1-0204",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S13",
+   "S4",
+   "S17",
+   "S12"
+  ],
+  "ms": 1470.8858999999939,
+  "jsonValid": true,
+  "explanation": "This is a fake Safaricom message that threatens you with suspension to make you act quickly. Genuine Safarom does not use personal numbers for such alerts. Do not call the number in the message."
+ },
+ {
+  "id": "kv1-0206",
+  "mode": "rules",
+  "level": "scam",
+  "category": "wrong_send_reversal",
+  "signals": [
+   "S1",
+   "S7",
+   "S8",
+   "S3",
+   "S16"
+  ]
+ },
+ {
+  "id": "kv1-0206",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "fake_mpesa_confirmation",
+  "signals": [
+   "S1",
+   "S7",
+   "S8",
+   "S3",
+   "S16"
+  ],
+  "ms": 1936.1918999999762,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA confirmation sent from an unknown number. The sender's number is the same as the sender of the message, which is suspicious. The balance shown is a known forgery sign. The message also mentions finding the number, which is a red flag for a scam. Do not send anything back and check your real balance in the M-PESA app."
+ },
+ {
+  "id": "kv1-0206",
+  "mode": "fused",
+  "level": "scam",
+  "category": "wrong_send_reversal",
+  "signals": [
+   "S1",
+   "S7",
+   "S8",
+   "S3",
+   "S16"
+  ],
+  "ms": 2038.0606000000262,
+  "jsonValid": true,
+  "explanation": "This is a fake M-PESA receipt sent from an ordinary phone number, and the amount is not formatted correctly. The message also shows the full sender number, which is not typical, and asks you to send money back, which is not how real mistakes are handled. Check your real balance in the M-PESA app and do not send anything back."
+ },
+ {
+  "id": "kv1-0209",
+  "mode": "rules",
+  "level": "high_risk",
+  "category": "job_scam",
+  "signals": [
+   "S10",
+   "S25",
+   "S12"
+  ]
+ },
+ {
+  "id": "kv1-0209",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "job_scam",
+  "signals": [
+   "S10",
+   "S25",
+   "S12"
+  ],
+  "ms": 1280.0838999999687,
+  "jsonValid": true,
+  "explanation": "A real employer does not ask you to pay fees to a personal number before you start. Check the agency on the NEA licensed list and do not pay."
+ },
+ {
+  "id": "kv1-0209",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "job_scam",
+  "signals": [
+   "S10",
+   "S25",
+   "S12"
+  ],
+  "ms": 1382.0537999999942,
+  "jsonValid": true,
+  "explanation": "A real employer does not ask you to pay fees to a personal number before you start. Check the agency on the NEA licensed list and do not pay."
+ },
+ {
+  "id": "kv1-0210",
+  "mode": "rules",
+  "level": "safe",
+  "category": "not_scam",
+  "signals": [
+   "S22"
+  ]
+ },
+ {
+  "id": "kv1-0210",
+  "mode": "llm",
+  "level": "high_risk",
+  "category": "investment_or_crypto",
+  "signals": [
+   "S22"
+  ],
+  "ms": 1224.9379999999655,
+  "jsonValid": true,
+  "explanation": "This is a fake promotional offer for a new phone. Real promotions do not ask for payment for delivery. Check the offer on official Bonga channels and do not pay."
+ },
+ {
+  "id": "kv1-0210",
+  "mode": "fused",
+  "level": "high_risk",
+  "category": "fake_prize",
+  "signals": [
+   "S22"
+  ],
+  "ms": 1180.4716999999946,
+  "jsonValid": true,
+  "explanation": "This is a fake promotion claiming you won a new phone, which is a known scam. Do not send money or personal details. Check the offer on official Bonga channels."
+ }
+]
