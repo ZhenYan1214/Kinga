@@ -15,7 +15,10 @@
   "scripts": {
     "spike:download": "tsx spikes/download-model.ts",
     "spike:llm": "tsx spikes/llm-json.ts",
-    "spike:wdk": "tsx spikes/wdk-sepolia.ts"
+    "spike:wdk": "tsx spikes/wdk-sepolia.ts",
+    "test": "tsx --test packages/*/test/*.test.ts",
+    "typecheck": "tsc",
+    "eval": "tsx eval/run.ts"
   },
   "dependencies": {
     "@qvac/sdk": "0.22.0",

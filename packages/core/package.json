@@ -1,0 +1,10 @@
+{
+  "name": "@kinga/core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic checks for Kinga: M-PESA receipt structure, scam signals, release check, risk fusion.",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

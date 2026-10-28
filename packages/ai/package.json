@@ -1,0 +1,10 @@
+{
+  "name": "@kinga/ai",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Kinga's on-device model layer: QVAC completion with a JSON schema, explaining what the rules found.",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}
