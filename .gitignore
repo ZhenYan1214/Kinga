@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+*.log
+.env
+.env.*
+!.env.example
+# QVAC model cache (multi-GB, downloaded locally)
+.models/
+.DS_Store

@@ -1,0 +1,33 @@
+{
+  "name": "kinga",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline, on-device scam guard for M-Pesa and USDT, built on Tether QVAC and WDK.",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=24.9.0"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "spike:download": "tsx spikes/download-model.ts",
+    "spike:llm": "tsx spikes/llm-json.ts",
+    "spike:wdk": "tsx spikes/wdk-sepolia.ts"
+  },
+  "dependencies": {
+    "@qvac/sdk": "0.22.0",
+    "@tetherto/wdk": "1.0.0-beta.22",
+    "@tetherto/wdk-wallet-evm": "1.0.0-beta.24"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  },
+  "overrides": {
+    "@tetherto/wdk-wallet": "1.0.0-beta.21"
+  }
+}
