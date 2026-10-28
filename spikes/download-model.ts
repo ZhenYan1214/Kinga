@@ -1,5 +1,6 @@
 // D0 spike: fetch Qwen3 4B into the local cache so later runs work with the network off.
-// Run with QVAC_CONFIG_PATH=./qvac.config.js so the cache lands in ./.models.
+// The cache lands in ./.models (see qvac.config.js): npm run spike:download
+import "./qvac-env.js";
 import { close, downloadAsset, QWEN3_4B_INST_Q4_K_M } from "@qvac/sdk";
 
 const started = Date.now();

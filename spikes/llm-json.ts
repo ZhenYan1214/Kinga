@@ -1,5 +1,6 @@
 // D0 spike: can Qwen3 4B, loaded from the local cache, return schema-valid JSON verdicts, and how fast?
-// Run with QVAC_CONFIG_PATH=./qvac.config.js. Meant to be run with the network switched off.
+// Meant to be run with the network switched off: npm run spike:llm
+import "./qvac-env.js";
 import { close, completion, loadModel, unloadModel, QWEN3_4B_INST_Q4_K_M } from "@qvac/sdk";
 
 const CATEGORIES = [
