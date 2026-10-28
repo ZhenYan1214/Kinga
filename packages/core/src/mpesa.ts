@@ -18,7 +18,8 @@ export interface MpesaReceipt {
   cost?: number;
 }
 
-const AMOUNT = String.raw`(?:Ksh|KES|KSH|Kshs\.?|Sh)\s?[\d,]+(?:\.\d+)?`;
+// \b: transaction codes can contain "SH" followed by digits (UJ3MA5SH26), which must not read as an amount.
+const AMOUNT = String.raw`\b(?:Ksh|KES|KSH|Kshs\.?|Sh)\s?[\d,]+(?:\.\d+)?`;
 const DATE = String.raw`(\d{1,2})\/(\d{1,2})\/(\d{2,4})`;
 const TIME = String.raw`(\d{1,2}:\d{2}(?:\s?[AP]M)?)`;
 const GENUINE_AMOUNT = /^Ksh\d{1,3}(?:,\d{3})*\.\d{2}$/;

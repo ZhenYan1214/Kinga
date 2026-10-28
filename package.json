@@ -25,7 +25,9 @@
     "dev:web": "npm run dev -w apps/web",
     "build:web": "npm run build -w apps/web",
     "demo:reset": "node -e \"require('fs').rmSync('.kinga/wallet-state.json',{force:true})\"",
-    "offline-proof": "tsx scripts/offline-proof.ts"
+    "offline-proof": "tsx scripts/offline-proof.ts",
+    "spike:download-vision": "tsx spikes/download-vision.ts",
+    "eval:ledger": "tsx eval/ledger.ts"
   },
   "dependencies": {
     "@qvac/sdk": "0.22.0",

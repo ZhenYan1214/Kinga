@@ -91,6 +91,7 @@ const REASON_SW: Record<SignalId, (e: string) => string> = {
   S2: (e) => `Salio linasomeka "${e}" badala ya kiasi; salio la "LOCKED" ni ishara inayojulikana ya ujumbe feki.`,
   S3: (e) => `Unaombwa urudishe pesa mwenyewe ("${e}"). Pesa iliyotumwa kimakosa hurudishwa na Safaricom kupitia 456, si na wewe.`,
   S4: (e) => `Inakulazimisha uharakishe au inagusa hisia ("${e}").`,
+  S5: () => `Kwa mujibu wa jumbe zako za M-PESA, pesa hii haikuwahi kuingia kwenye akaunti yako. Angalia salio kwa *334# ili uhakikishe.`,
   S6: (e) => `Code ya muamala ("${e}") haifanani na code za M-PESA (herufi kubwa na tarakimu, jumla 10).`,
   S7: (e) => `Muundo wa ujumbe ("${e}") haufanani na jinsi M-PESA huandika.`,
   S8: (e) => `Tangu Machi 2026 M-PESA huficha sehemu ya namba ya mtumaji, lakini huu unaonyesha namba kamili (${e}).`,

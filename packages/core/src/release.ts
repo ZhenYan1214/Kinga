@@ -1,6 +1,7 @@
 // Act 2: before a P2P seller releases USDT, reconcile the buyer's "I paid" against the seller's own inbox.
 // Only a structurally valid "received" SMS from MPESA counts; screenshots and pasted receipts never do.
 import { looksLikeMpesaReceipt, parseMpesaReceipt, receiptSignals, type MpesaReceipt } from "./mpesa.js";
+import { MpesaLedger } from "./ledger.js";
 import { isMpesaSender } from "./sender.js";
 import type { Message } from "./types.js";
 
@@ -47,20 +48,28 @@ export function namesMatch(receiptName: string, kycName: string): boolean {
 
 export function checkRelease(order: P2pOrder, inbox: readonly Message[], usedCodes: ReadonlySet<string> = new Set()): ReleaseCheck {
   const receipts = inbox.filter((m) => looksLikeMpesaReceipt(m.text));
+  // Genuine = from MPESA, well-formed, and consistent with the balances of the messages around it.
+  const ledger = new MpesaLedger(inbox);
+  const brokenChain = (m: Message) => ["contradicts", "does_not_fit"].includes(ledger.check(m).status);
   const genuine = receipts
-    .filter((m) => isMpesaSender(m.sender) && receiptSignals(m).every((s) => s.strength === "weak"))
+    .filter((m) => isMpesaSender(m.sender) && receiptSignals(m).every((s) => s.strength === "weak") && !brokenChain(m))
     .map((m) => parseMpesaReceipt(m.text))
     .filter((r) => r.kind === "received");
   const issues: ReleaseIssue[] = [];
 
   if (order.claimedCode) {
     const claimed = order.claimedCode.toUpperCase();
-    const forged = receipts.find((m) => !isMpesaSender(m.sender) && parseMpesaReceipt(m.text).code?.toUpperCase() === claimed);
+    const withCode = receipts.filter((m) => parseMpesaReceipt(m.text).code?.toUpperCase() === claimed);
+    const forged = withCode.find((m) => !isMpesaSender(m.sender));
+    // A message that claims to be from MPESA but breaks the balance chain is forged too (spoofed sender ID).
+    const spoofed = withCode.find((m) => isMpesaSender(m.sender) && ledger.check(m).status === "contradicts");
     if (forged) {
       issues.push({
         code: "FORGED_IN_INBOX",
         reason: `The code ${claimed} only appears in a message from ${forged.sender}, not from MPESA. That message is forged.`,
       });
+    } else if (spoofed) {
+      issues.push({ code: "FORGED_IN_INBOX", reason: `The message with code ${claimed} looks like M-PESA, but: ${ledger.check(spoofed).reason}` });
     }
   }
 

@@ -1,6 +1,7 @@
 // Turns signals into a risk level and a category guess, and merges in the LLM's view.
 // The rule: the LLM can only make the verdict more cautious, never clear what the rules flagged.
-import { looksLikeMpesaReceipt, receiptSignals } from "./mpesa.js";
+import { claimedAmount, type MpesaLedger } from "./ledger.js";
+import { looksLikeMpesaReceipt, parseMpesaReceipt, receiptSignals } from "./mpesa.js";
 import { isMpesaSender } from "./sender.js";
 import { textSignals } from "./signals.js";
 import { RISK_ORDER, type Category, type Message, type RiskLevel, type Signal, type SignalId } from "./types.js";
@@ -16,8 +17,47 @@ export interface RuleVerdict {
   verifiedReceipt: boolean;
 }
 
-export function analyze(message: Message): RuleVerdict {
-  const signals = [...receiptSignals(message), ...textSignals(message)];
+export interface AnalyzeContext {
+  /** The user's own M-PESA history; when present, receipts and "I sent you money" claims are checked against it. */
+  ledger?: MpesaLedger;
+}
+
+const CLAIMS_SENT = /\b(?:nimetuma|nimekutumia|nimelipa|nimeshalipa|i (?:have |'ve )?(?:sent|paid)|sent (?:you|it)|paid you|by mistake|kimakosa)\b/i;
+const ASKS_BACK = /\b(?:nirudishie|nirudish\w*|urudishe|rudisha|send (?:it|the money|them) back|return (?:it|the money|the funds)|reverse|kimakosa|by mistake)\b/i;
+
+/** S5: what the user's own M-PESA ledger says about a receipt or a claim that money was sent. */
+export function ledgerSignals(message: Message, ledger: MpesaLedger | undefined): Signal[] {
+  if (!ledger || ledger.entries.length === 0) return [];
+  if (looksLikeMpesaReceipt(message.text)) {
+    const chain = ledger.check(message);
+    if (chain.status === "contradicts") return [{ id: "S5", strength: "hard", evidence: "balance chain", reason: chain.reason }];
+    if (chain.status === "does_not_fit") {
+      // From MPESA itself a break more likely means a missing message, so it counts for less, except for money
+      // coming in: that is what forgers fake, and "check your balance before handing anything over" is cheap advice.
+      const incoming = parseMpesaReceipt(message.text).kind === "received";
+      const strength = !isMpesaSender(message.sender) || incoming ? "strong" : "medium";
+      return [{ id: "S5", strength, evidence: "balance chain", reason: chain.reason }];
+    }
+    return [];
+  }
+  const amount = claimedAmount(message.text);
+  if (amount === undefined || !CLAIMS_SENT.test(message.text) || isMpesaSender(message.sender)) return [];
+  const latest = ledger.latest();
+  const since = latest === undefined ? undefined : latest - 3 * 24 * 60;
+  if (ledger.incoming(amount, since).length > 0) return [];
+  const asksBack = ASKS_BACK.test(message.text);
+  return [
+    {
+      id: "S5",
+      strength: asksBack ? "hard" : "strong",
+      evidence: amount.toLocaleString("en-US"),
+      reason: `No payment of Ksh${amount.toLocaleString("en-US")} reached your M-PESA in the last 3 days of your messages: the money ${asksBack ? "they want back" : "they say they sent"} never arrived.`,
+    },
+  ];
+}
+
+export function analyze(message: Message, context: AnalyzeContext = {}): RuleVerdict {
+  const signals = [...receiptSignals(message), ...textSignals(message), ...ledgerSignals(message, context.ledger)];
   const score = signals.reduce((sum, s) => sum + POINTS[s.strength], 0);
   const level: RiskLevel = score >= 100 ? "scam" : score >= 5 ? "high_risk" : score >= 3 ? "suspicious" : "safe";
   const verifiedReceipt =
