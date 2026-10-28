@@ -32,6 +32,14 @@ describe("MpesaLedger", () => {
     }
   });
 
+  it("orders by the receipts' own dates, whatever order the inbox is in", () => {
+    const fake = forged("41,230.00");
+    const shuffled = [G3, fake, G1, G4, G2];
+    const ledger = new MpesaLedger(shuffled);
+    for (const m of [G2, G3, G4]) assert.equal(ledger.check(m).status, "fits", m.text);
+    assert.equal(ledger.check(fake).status, "contradicts");
+  });
+
   it("only says does_not_fit when nothing comes after the forgery yet", () => {
     const fake = forged("41,230.00", "6:30 PM");
     assert.equal(new MpesaLedger([...CHAIN, fake]).check(fake).status, "does_not_fit");

@@ -7,8 +7,8 @@ import type { Message } from "./types.js";
 
 export interface P2pOrder {
   amountKsh: number;
-  /** The buyer's verified name on the exchange. */
-  buyerKycName: string;
+  /** The buyer's verified name on the exchange. Omit to check only that the money arrived (e.g. a shop counter). */
+  buyerKycName?: string;
   /** Transaction code the buyer quoted, if any. */
   claimedCode?: string;
 }
@@ -93,17 +93,18 @@ export function checkRelease(order: P2pOrder, inbox: readonly Message[], usedCod
   }
 
   // Prefer a receipt that also matches the buyer's name, so a second payment from someone else doesn't hide it.
-  const receipt = candidates.find((r) => r.counterparty && namesMatch(r.counterparty, order.buyerKycName)) ?? candidates[0]!;
+  const buyer = order.buyerKycName;
+  const receipt = candidates.find((r) => buyer && r.counterparty && namesMatch(r.counterparty, buyer)) ?? candidates[0]!;
   if (receipt.amount !== order.amountKsh) {
     issues.push({
       code: "AMOUNT_MISMATCH",
       reason: `The M-PESA receipt is for Ksh${receipt.amount} but the order is for Ksh${order.amountKsh}.`,
     });
   }
-  if (!receipt.counterparty || !namesMatch(receipt.counterparty, order.buyerKycName)) {
+  if (buyer && (!receipt.counterparty || !namesMatch(receipt.counterparty, buyer))) {
     issues.push({
       code: "NAME_MISMATCH",
-      reason: `The money came from ${receipt.counterparty ?? "an unknown payer"}, not from the buyer ${order.buyerKycName}. This is how triangular fraud starts: the real payer may later report you.`,
+      reason: `The money came from ${receipt.counterparty ?? "an unknown payer"}, not from the buyer ${buyer}. This is how triangular fraud starts: the real payer may later report you.`,
     });
   }
   if (receipt.code && usedCodes.has(receipt.code)) {

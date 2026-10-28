@@ -1,4 +1,6 @@
 // Demo data for the two acts. Written for the demo, not taken from the eval set; all names, numbers and codes are invented.
+// The seller is AMINA HASSAN. Her MPESA messages form one consistent balance chain:
+// 11,730 (27 Oct) -> +6,500 -> +9,750 -> -450 -> -1,013 = 26,517, with one spoofed "MPESA" forgery (m12) in between.
 import type { Message } from "@kinga/core";
 
 export interface InboxItem extends Message {
@@ -72,6 +74,28 @@ export const DEMO_INBOX: InboxItem[] = [
     text: "UJ7K1PL5RT Confirmed. Ksh1,500.00 sent to JANE WAMBUI 0723***901 on 27/10/26 at 7:40 PM. New M-PESA balance is Ksh11,730.00. Transaction cost, Ksh23.00. Amount you can transact within the day is 498,500.00.",
   },
   {
+    id: "m13",
+    time: "28 Oct, 6:10 PM",
+    channel: "sms",
+    sender: "MPESA",
+    text: "UJ7Q2TM4HX Confirmed. Ksh450.00 paid to NAIVAS MOI AVENUE. on 28/10/26 at 6:10 PM.New M-PESA balance is Ksh27,530.00. Transaction cost, Ksh0.00.",
+  },
+  {
+    // Template-perfect, real sender ID, and the forger even knew the balance. Only the chain gives it away.
+    id: "m12",
+    time: "28 Oct, 6:45 PM",
+    channel: "sms",
+    sender: "MPESA",
+    text: "UJ8A1BC2DE Confirmed.You have received Ksh20,000.00 from DANIEL KIPRONO 0711***260 on 28/10/26 at 6:45 PM New M-PESA balance is Ksh47,530.00.",
+  },
+  {
+    id: "m14",
+    time: "28 Oct, 7:30 PM",
+    channel: "sms",
+    sender: "MPESA",
+    text: "UJ7S5NB3KW Confirmed. Ksh1,000.00 sent to JANE WAMBUI 0723***901 on 28/10/26 at 7:30 PM. New M-PESA balance is Ksh26,517.00. Transaction cost, Ksh13.00. Amount you can transact within the day is 497,500.00.",
+  },
+  {
     id: "m10",
     time: "28 Oct, 9:05 PM",
     channel: "whatsapp",
@@ -92,7 +116,10 @@ export interface DemoOrder {
   buyerKycName: string;
   amountKsh: number;
   usdt: string;
+  /** The code the buyer quoted; the demo reads it from the screenshot instead when the vision model is available. */
   claimedCode: string;
+  /** The buyer's payment screenshot, in eval/data/screenshots. */
+  screenshot: string;
   /** Account index on the test seed that plays the buyer, so demo USDT stays with us. */
   buyerAccount: number;
   /** Saved before the demo starts: repeat buyers are on the allowlist, a first-time buyer is not. */
@@ -108,6 +135,7 @@ export const DEMO_ORDERS: DemoOrder[] = [
     amountKsh: 6500,
     usdt: "50",
     claimedCode: "UJ7M2QK8TA",
+    screenshot: "brian-sms.png",
     buyerAccount: 1,
     repeatBuyer: true,
     chat: ["Hi, I've sent Ksh6,500 from my M-Pesa, name BRIAN OUMA. Please release when you see it, thanks."],
@@ -119,6 +147,7 @@ export const DEMO_ORDERS: DemoOrder[] = [
     amountKsh: 13000,
     usdt: "100",
     claimedCode: "UJ7P9XK3LC",
+    screenshot: "kevin-sms.png",
     buyerAccount: 2,
     repeatBuyer: false,
     chat: ["Paid! Check the screenshot I sent. Release the USDT now please, I'm in a hurry.", "We can continue on WhatsApp, it's faster."],
@@ -130,9 +159,22 @@ export const DEMO_ORDERS: DemoOrder[] = [
     amountKsh: 9750,
     usdt: "75",
     claimedCode: "UJ7N4RD2WB",
+    screenshot: "faith-app.png",
     buyerAccount: 3,
     repeatBuyer: true,
     chat: ["Done, paid 9,750. It came from my brother's line, the name will show PETER NJOROGE. Release fast please."],
     story: "Real money, but from someone else: triangular fraud.",
+  },
+  {
+    id: "P2P-1004",
+    buyerKycName: "Daniel Kiprono",
+    amountKsh: 20000,
+    usdt: "150",
+    claimedCode: "UJ8A1BC2DE",
+    screenshot: "forged-app.png",
+    buyerAccount: 4,
+    repeatBuyer: true,
+    chat: ["Sent 20,000 from my M-Pesa, the SMS should already be on your phone. Kindly release."],
+    story: "A perfect-looking 'MPESA' SMS is in your inbox, but your balances say the money never came.",
   },
 ];

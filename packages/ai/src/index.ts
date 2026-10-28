@@ -157,6 +157,8 @@ export class KingaModel {
         stream: false,
         history,
         responseFormat: { type: "json_schema", json_schema: { name: "verdict", schema: VERDICT_SCHEMA } },
+        // Greedy decoding: the same message always gets the same verdict, and evals are reproducible.
+        generationParams: { temp: 0, seed: 7 },
       });
       final = await run.final;
     } catch (error) {
@@ -184,3 +186,4 @@ export class KingaModel {
     void close();
   }
 }
+export * from "./vision.js";

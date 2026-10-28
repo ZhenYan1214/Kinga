@@ -83,7 +83,7 @@ function guessCategory(message: Message, signals: Signal[]): Category {
   const has = (id: SignalId) => signals.some((s) => s.id === id);
   if (message.channel === "p2p_chat") return "p2p_payment_fraud";
   if (has("S3")) return "wrong_send_reversal";
-  if (has("S1") || has("S2")) return "fake_mpesa_confirmation";
+  if (has("S1") || has("S2") || (has("S5") && looksLikeMpesaReceipt(message.text))) return "fake_mpesa_confirmation";
   if (has("S23")) return "betting_tips";
   if (has("S24")) return "fake_loan_or_fuliza";
   if (has("S22")) return "fake_prize";

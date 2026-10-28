@@ -27,7 +27,9 @@
     "demo:reset": "node -e \"require('fs').rmSync('.kinga/wallet-state.json',{force:true})\"",
     "offline-proof": "tsx scripts/offline-proof.ts",
     "spike:download-vision": "tsx spikes/download-vision.ts",
-    "eval:ledger": "tsx eval/ledger.ts"
+    "eval:ledger": "tsx eval/ledger.ts",
+    "make:screenshots": "tsx scripts/make-screenshots.ts",
+    "spike:vision": "tsx spikes/vision-read.ts"
   },
   "dependencies": {
     "@qvac/sdk": "0.22.0",

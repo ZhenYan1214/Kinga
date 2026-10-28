@@ -1,14 +1,15 @@
 // Kinga's local service. Binds to 127.0.0.1 only. The model and every check run on this machine; the only
 // outbound traffic is the two wallet network steps (/api/network/*), which the UI labels and the user triggers.
 // npm run dev:server   (KINGA_NO_MODEL=1 skips the model for quick UI work)
-import { existsSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import WDK from "@tetherto/wdk";
 import WalletManagerEvm from "@tetherto/wdk-wallet-evm";
-import { adviceFor, analyze, reasonInSwahili, checkAddress, checkRelease, fuse, type Message } from "@kinga/core";
-import { KingaModel, type ModelVerdict } from "@kinga/ai";
+import { adviceFor, analyze, reasonInSwahili, checkAddress, checkRelease, fuse, MpesaLedger, type Message } from "@kinga/core";
+import { KingaModel, ScreenshotReader, type ModelVerdict, type ScreenshotFields } from "@kinga/ai";
 import { formatUnits, JsonRpc, KingaWallet, parseUnits } from "@kinga/wallet";
 import { DEMO_INBOX, DEMO_ORDERS, type DemoOrder } from "./demo.js";
 
@@ -34,7 +35,17 @@ const modelReady: Promise<void> =
         (error) => void ((modelStatus = "failed"), console.error("model failed to load:", error)),
       )
     : Promise.resolve();
-// One model, one request at a time.
+// The screenshot reader (Qwen3-VL 2B) loads alongside; it only reads, the ledger decides.
+let reader: ScreenshotReader | undefined;
+let readerStatus: "disabled" | "loading" | "ready" | "failed" = process.env.KINGA_NO_MODEL ? "disabled" : "loading";
+const readerReady: Promise<void> =
+  readerStatus === "loading"
+    ? ScreenshotReader.load().then(
+        (r) => void ((reader = r), (readerStatus = "ready"), console.log("screenshot reader ready")),
+        (error) => void ((readerStatus = "failed"), console.error("screenshot reader failed to load:", error)),
+      )
+    : Promise.resolve();
+// One model call at a time.
 let modelQueue: Promise<unknown> = Promise.resolve();
 const serialized = <T>(task: () => Promise<T>): Promise<T> => {
   const run = modelQueue.then(task, task);
@@ -84,9 +95,11 @@ interface Verdict {
 }
 
 const verdictCache = new Map<string, Verdict>();
+// The seller's own M-PESA history: the ground truth for every "I paid you" and "I sent it by mistake".
+const LEDGER = new MpesaLedger(DEMO_INBOX);
 
 async function verdictFor(message: Message, useModel: boolean): Promise<Verdict> {
-  const rules = analyze(message);
+  const rules = analyze(message, { ledger: LEDGER });
   let modelView: Verdict["model"];
   let modelNote: string | undefined;
   if (useModel) await modelReady;
@@ -115,16 +128,39 @@ function orderView(order: DemoOrder) {
   return { ...order, buyerAddress: to, lookalikeAddress: poisoned(to) };
 }
 
+// ---- screenshots ----
+const SCREENSHOT_DIR = join(ROOT, "eval/data/screenshots");
+const UPLOAD_DIR = join(ROOT, ".kinga/uploads");
+const screenshotCache = new Map<string, { fields: ScreenshotFields; ms: number }>();
+
+/** Reads a screenshot on device; cached per file. undefined when the reader is unavailable or fails. */
+async function readScreenshot(path: string) {
+  const cached = screenshotCache.get(path);
+  if (cached) return cached;
+  await readerReady;
+  if (!reader) return undefined;
+  const result = await serialized(() => reader!.read(path));
+  if (result) screenshotCache.set(path, { fields: result.fields, ms: Math.round(result.ms) });
+  return result && screenshotCache.get(path);
+}
+
+/** The buyer's claim: read from their screenshot when possible, otherwise the code they typed. */
+async function claimFor(order: DemoOrder) {
+  const screenshot = await readScreenshot(join(SCREENSHOT_DIR, order.screenshot));
+  return { code: screenshot?.fields.transaction_code || order.claimedCode, screenshot };
+}
+
 async function releaseInputs(orderId: string, to: string) {
   const order = DEMO_ORDERS.find((o) => o.id === orderId);
   if (!order) throw new HttpError(404, `no order ${orderId}`);
+  const claim = await claimFor(order);
   const receiptCheck = checkRelease(
-    { amountKsh: order.amountKsh, buyerKycName: order.buyerKycName, claimedCode: order.claimedCode },
+    { amountKsh: order.amountKsh, buyerKycName: order.buyerKycName, claimedCode: claim.code },
     DEMO_INBOX,
     wallet.usedMpesaCodes(),
   );
   const addressVerdict = checkAddress(to, "evm", wallet.allowlist);
-  return { order, receiptCheck, addressVerdict, amount: parseUnits(order.usdt, DECIMALS) };
+  return { order, claim, receiptCheck, addressVerdict, amount: parseUnits(order.usdt, DECIMALS) };
 }
 
 function walletView() {
@@ -160,7 +196,7 @@ const send = (res: ServerResponse, status: number, data: unknown) => {
 
 type Handler = (req: IncomingMessage, params: string[]) => Promise<unknown>;
 const routes: [string, RegExp, Handler][] = [
-  ["GET", /^\/api\/status$/, async () => ({ model: modelStatus, wallet: walletView() })],
+  ["GET", /^\/api\/status$/, async () => ({ model: modelStatus, reader: readerStatus, wallet: walletView() })],
   ["GET", /^\/api\/inbox$/, async () => DEMO_INBOX.map((m) => ({ ...m, verdict: verdictCache.get(m.id) ?? null }))],
   [
     "POST",
@@ -190,10 +226,45 @@ const routes: [string, RegExp, Handler][] = [
     /^\/api\/release\/check$/,
     async (req) => {
       const { orderId, to } = (await body(req)) as { orderId: string; to: string };
-      const { order, receiptCheck, addressVerdict, amount } = await releaseInputs(orderId, to);
+      const { order, claim, receiptCheck, addressVerdict, amount } = await releaseInputs(orderId, to);
       const chat = await verdictFor({ channel: "p2p_chat", sender: "P2P buyer", contact: null, text: order.chat.join("\n") }, true);
-      const gate = await wallet.preview({ orderId, mpesaCode: receiptCheck.receipt?.code ?? order.claimedCode, to, amount, receiptCheck, addressVerdict });
-      return { receiptCheck, addressVerdict, chat, gate };
+      const gate = await wallet.preview({ orderId, mpesaCode: receiptCheck.receipt?.code ?? claim.code, to, amount, receiptCheck, addressVerdict });
+      return { claim, receiptCheck, addressVerdict, chat, gate };
+    },
+  ],
+  [
+    "POST",
+    /^\/api\/verify$/,
+    async (req) => {
+      // "Did they really pay?": read a payment screenshot on device, then check it against the ledger.
+      const { image, orderId, amountKsh, buyerName } = (await body(req)) as { image?: string; orderId?: string; amountKsh?: number; buyerName?: string };
+      let path: string;
+      const order = orderId ? DEMO_ORDERS.find((o) => o.id === orderId) : undefined;
+      if (orderId) {
+        if (!order) throw new HttpError(404, `no order ${orderId}`);
+        path = join(SCREENSHOT_DIR, order.screenshot);
+      } else {
+        const match = image?.match(/^data:image\/(png|jpeg|jpg|webp);base64,(.+)$/);
+        if (!match) throw new HttpError(400, "Send a PNG, JPEG or WebP screenshot.");
+        const bytes = Buffer.from(match[2]!, "base64");
+        mkdirSync(UPLOAD_DIR, { recursive: true });
+        path = join(UPLOAD_DIR, `${createHash("sha256").update(bytes).digest("hex").slice(0, 16)}.${match[1] === "jpg" ? "jpeg" : match[1]}`);
+        writeFileSync(path, bytes);
+      }
+      const screenshot = await readScreenshot(path);
+      if (!screenshot) throw new HttpError(503, `The screenshot reader is ${readerStatus}; it could not read this image.`);
+      // The transaction code is what gets looked up; the amount to expect comes from the order or the user, and
+      // only falls back to what the reader saw (a misread amount must not decide anything on its own).
+      const check = checkRelease(
+        {
+          amountKsh: order?.amountKsh ?? (Number(amountKsh) || screenshot.fields.amount),
+          buyerKycName: order?.buyerKycName ?? (buyerName || undefined),
+          claimedCode: screenshot.fields.transaction_code,
+        },
+        DEMO_INBOX,
+        wallet.usedMpesaCodes(),
+      );
+      return { screenshot, check };
     },
   ],
   [
@@ -260,6 +331,12 @@ function serveStatic(path: string, res: ServerResponse) {
 const server = createServer(async (req, res) => {
   const path = new URL(req.url ?? "/", "http://localhost").pathname;
   try {
+    // The demo orders' payment screenshots, for the UI to show next to what the reader extracted.
+    const shot = path.match(/^\/api\/screenshots\/([\w-]+\.png)$/)?.[1];
+    if (shot && DEMO_ORDERS.some((o) => o.screenshot === shot)) {
+      res.writeHead(200, { "content-type": "image/png" });
+      return res.end(readFileSync(join(SCREENSHOT_DIR, shot)));
+    }
     for (const [method, pattern, handler] of routes) {
       const match = path.match(pattern);
       if (match && req.method === method) return send(res, 200, await handler(req, match.slice(1)));

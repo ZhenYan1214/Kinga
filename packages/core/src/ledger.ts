@@ -74,15 +74,23 @@ export class MpesaLedger {
 
   /** Builds the ledger from the MPESA-sender messages of an inbox, in the order they were received. */
   constructor(private readonly inbox: readonly Message[]) {
-    this.entries = inbox.flatMap((m, i) => (isMpesaSender(m.sender) ? (entryOf(m, i) ?? []) : []));
+    const entries = inbox.flatMap((m, i) => (isMpesaSender(m.sender) ? (entryOf(m, i) ?? []) : []));
+    // Order by the receipts' own date and time; a message without one (Fuliza, reversals) keeps the time of the
+    // message received just before it. The inbox itself may be sorted any way.
+    let last = -Infinity;
+    for (const e of entries) {
+      if (e.at === undefined) e.at = last;
+      last = e.at;
+    }
+    this.entries = entries.sort((a, b) => a.at! - b.at! || a.index - b.index);
     const forged = new Set(this.entries.filter((e) => this.checkAgainst(e.message, this.entries).status === "contradicts"));
     this.trusted = this.entries.filter((e) => !forged.has(e));
   }
 
-  /** Where a message sits in time relative to the ledger: by its own date if it has one, else by inbox position. */
+  /** Where a message sits in time relative to the (time-sorted) ledger. Undated claims count as newest. */
   private neighbours(claim: LedgerEntry, others: LedgerEntry[]): { previous?: LedgerEntry; next?: LedgerEntry } {
-    const before = (e: LedgerEntry) =>
-      claim.at !== undefined && e.at !== undefined ? e.at < claim.at || (e.at === claim.at && e.index < claim.index) : e.index < claim.index;
+    const t = claim.at ?? Infinity;
+    const before = (e: LedgerEntry) => e.at! < t || (e.at === t && e.index < claim.index);
     const previous = others.filter(before).at(-1);
     const next = others.find((e) => !before(e));
     return { previous, next };
