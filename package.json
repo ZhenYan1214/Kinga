@@ -18,7 +18,8 @@
     "spike:wdk": "tsx spikes/wdk-sepolia.ts",
     "test": "tsx --test packages/*/test/*.test.ts",
     "typecheck": "tsc",
-    "eval": "tsx eval/run.ts"
+    "eval": "tsx eval/run.ts",
+    "spike:wallet": "tsx spikes/wallet-sepolia.ts"
   },
   "dependencies": {
     "@qvac/sdk": "0.22.0",

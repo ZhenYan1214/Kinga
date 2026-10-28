@@ -1,0 +1,10 @@
+{
+  "name": "@kinga/wallet",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Kinga's release gate: WDK policies, a rolling budget, offline signing and an explicit broadcast step.",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

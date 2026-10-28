@@ -8,3 +8,4 @@ coverage/
 # QVAC model cache (multi-GB, downloaded locally)
 .models/
 .DS_Store
+.kinga/
