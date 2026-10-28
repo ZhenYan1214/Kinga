@@ -7,7 +7,7 @@ import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import WDK from "@tetherto/wdk";
 import WalletManagerEvm from "@tetherto/wdk-wallet-evm";
-import { adviceFor, analyze, checkAddress, checkRelease, fuse, type Message } from "@kinga/core";
+import { adviceFor, analyze, reasonInSwahili, checkAddress, checkRelease, fuse, type Message } from "@kinga/core";
 import { KingaModel, type ModelVerdict } from "@kinga/ai";
 import { formatUnits, JsonRpc, KingaWallet, parseUnits } from "@kinga/wallet";
 import { DEMO_INBOX, DEMO_ORDERS, type DemoOrder } from "./demo.js";
@@ -50,7 +50,8 @@ const wallet = await KingaWallet.open({
   tokenDecimals: DECIMALS,
   perTransactionCap: parseUnits("200", DECIMALS),
   dailyBudget: parseUnits("500", DECIMALS),
-  statePath: join(ROOT, ".kinga/wallet-state.json"),
+  // KINGA_STATE lets the offline proof run against its own ledger.
+  statePath: process.env.KINGA_STATE ?? join(ROOT, ".kinga/wallet-state.json"),
 });
 const rpc = new JsonRpc(SEPOLIA_RPCS);
 
@@ -75,8 +76,9 @@ interface Verdict {
   level: string;
   category: string;
   decidedBy: string;
-  signals: { id: string; strength: string; evidence: string; reason: string }[];
+  signals: { id: string; strength: string; evidence: string; reason: string; reasonSw: string }[];
   advice: string[];
+  adviceSw: string[];
   model?: (ModelVerdict & { ms: number }) | undefined;
   modelNote?: string;
 }
@@ -100,8 +102,9 @@ async function verdictFor(message: Message, useModel: boolean): Promise<Verdict>
     level: fused.level,
     category: fused.category,
     decidedBy: fused.decidedBy,
-    signals: fused.signals,
+    signals: fused.signals.map((s) => ({ ...s, reasonSw: reasonInSwahili(s) })),
     advice: adviceFor(fused.category, fused.level),
+    adviceSw: adviceFor(fused.category, fused.level, "sw"),
     model: modelView,
     modelNote,
   };

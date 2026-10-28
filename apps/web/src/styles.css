@@ -494,3 +494,8 @@ mark {
     grid-template-columns: 1fr;
   }
 }
+.lang {
+  margin-left: auto;
+  font-size: 12px;
+  padding: 4px 10px;
+}

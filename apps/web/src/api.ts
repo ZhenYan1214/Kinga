@@ -8,6 +8,7 @@ export interface Signal {
   strength: "hard" | "strong" | "medium" | "weak";
   evidence: string;
   reason: string;
+  reasonSw: string;
 }
 
 export interface Verdict {
@@ -16,6 +17,7 @@ export interface Verdict {
   decidedBy: "rules" | "llm";
   signals: Signal[];
   advice: string[];
+  adviceSw: string[];
   model?: { red_flags: string[]; explanation: string; impersonates: string; requested_action: string; ms: number };
   modelNote?: string;
 }
@@ -114,4 +116,24 @@ export const CATEGORY_LABEL: Record<string, string> = {
   lookalike_paybill: "Look-alike paybill or till",
   romance_or_extortion: "Romance or extortion",
   p2p_payment_fraud: "P2P payment fraud",
+};
+
+export const LEVEL_LABEL_SW: Record<Level, string> = { safe: "Inaonekana salama", suspicious: "Ya kutiliwa shaka", high_risk: "Hatari kubwa", scam: "Utapeli" };
+
+export const CATEGORY_LABEL_SW: Record<string, string> = {
+  not_scam: "Ujumbe wa kawaida",
+  wrong_send_reversal: "Ombi feki la kurudisha pesa 'iliyotumwa kimakosa'",
+  fake_mpesa_confirmation: "Ujumbe feki wa M-PESA",
+  fake_loan_or_fuliza: "Ofa feki ya mkopo au Fuliza",
+  fake_customer_care: "Huduma kwa wateja feki / wizi wa PIN",
+  fake_prize: "Zawadi feki",
+  relative_impersonation: "Mtu anayejifanya ndugu au mwenye nyumba",
+  sim_swap: "Jaribio la kubadilisha laini (SIM swap)",
+  investment_or_crypto: "Mpango wa uwekezaji au crypto",
+  job_scam: "Utapeli wa kazi",
+  betting_tips: "Tips za mechi zilizopangwa",
+  government_impersonation: "Shirika feki la serikali",
+  lookalike_paybill: "Paybill au till inayofanana na halisi",
+  romance_or_extortion: "Mapenzi au vitisho",
+  p2p_payment_fraud: "Udanganyifu wa malipo ya P2P",
 };
