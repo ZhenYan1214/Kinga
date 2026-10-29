@@ -56,7 +56,7 @@ function App() {
           </button>
         ))}
       </nav>
-      <main className={tab === "release" ? "with-wallet" : ""}>
+      <main className={tab === "release" && status?.wallet ? "with-wallet" : ""}>
         {/* All stay mounted so switching tabs keeps results that are already computed. */}
         <div hidden={tab !== "verify"}>
           <Verify inboxSource={status?.inbox} />
@@ -65,15 +65,27 @@ function App() {
           <Ledger source={status?.inbox} onSource={onInbox} />
         </div>
         <div hidden={tab !== "release"}>
-          <Release
-            onWallet={onWallet}
-            walletVersion={`${status?.wallet.snapshot?.takenAt}|${status?.wallet.allowlist.length}|${status?.wallet.releases.length}`}
-          />
+          {status?.wallet === null ? (
+            <section className="card">
+              <h3>The USDT release is optional</h3>
+              <p className="muted">
+                Checking payments works without it. To try releasing test USDT on Sepolia, run <code>npm run spike:wdk</code> once to create a
+                test wallet, then restart Kinga.
+              </p>
+            </section>
+          ) : (
+            status && (
+              <Release
+                onWallet={onWallet}
+                walletVersion={`${status.wallet.snapshot?.takenAt}|${status.wallet.allowlist.length}|${status.wallet.releases.length}`}
+              />
+            )
+          )}
         </div>
         <div hidden={tab !== "inbox"}>
           <Inbox key={inboxKey} />
         </div>
-        {tab === "release" && <WalletPanel wallet={status?.wallet} onWallet={onWallet} />}
+        {tab === "release" && status?.wallet && <WalletPanel wallet={status.wallet} onWallet={onWallet} />}
       </main>
     </div>
   );

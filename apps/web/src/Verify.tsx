@@ -21,6 +21,16 @@ function verdictOf(result: VerifyResult): { tone: Tone; en: string; sw: string }
   }
   const has = (c: string) => check.issues.some((i) => i.code === c);
   if (has("FORGED_IN_INBOX")) return { tone: "no", en: "Fake. This payment never reached your M-PESA.", sw: "Feki. Pesa hii haikuwahi kufika kwenye M-PESA yako." };
+  if (has("AMOUNT_MISMATCH") && result.amountFrom === "screenshot") {
+    // Nobody said what to expect, so the only other number is the model's reading, and that can be a misread.
+    const real = ksh(check.receipt?.amount);
+    const read = ksh(screenshot.fields.amount);
+    return {
+      tone: "warn",
+      en: `Check the amount. Your M-PESA shows ${real} for ${check.receipt?.code}; the model read ${read} on the screenshot. Compare the picture yourself: if it says ${read}, it was edited.`,
+      sw: `Angalia kiasi. M-PESA yako inaonyesha ${real} kwa ${check.receipt?.code}; modeli ilisoma ${read} kwenye picha. Linganisha picha mwenyewe: ikionyesha ${read}, imebadilishwa.`,
+    };
+  }
   if (has("AMOUNT_MISMATCH")) {
     return {
       tone: "no",
@@ -108,7 +118,13 @@ export function Verify({ inboxSource }: { inboxSource?: InboxSource }) {
 
   const image = source?.kind === "demo" ? `/api/screenshots/${source.claim.screenshot}` : source?.dataUrl;
   const verdict = result && verdictOf(result);
-  const shownIssues = result?.check.issues.filter((i, _n, all) => !(i.code === "CODE_NOT_IN_INBOX" && all.some((j) => j.code === "FORGED_IN_INBOX"))) ?? [];
+  const shownIssues =
+    result?.check.issues.filter(
+      (i, _n, all) =>
+        !(i.code === "CODE_NOT_IN_INBOX" && all.some((j) => j.code === "FORGED_IN_INBOX")) &&
+        // The headline already says it, without the "it was edited" the core reason assumes.
+        !(i.code === "AMOUNT_MISMATCH" && result.amountFrom === "screenshot"),
+    ) ?? [];
 
   return (
     <div className="verify">
@@ -135,7 +151,7 @@ export function Verify({ inboxSource }: { inboxSource?: InboxSource }) {
         <details className="upload">
           <summary>{t.upload}</summary>
           <div className="form">
-            <input placeholder="Amount you expect (Ksh), optional" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ""))} />
+            <input placeholder="Amount you expect (Ksh), recommended"value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ""))} />
             <input placeholder="Name of the person who says they paid, optional" value={payer} onChange={(e) => setPayer(e.target.value)} />
             <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => upload(e.target.files?.[0])} />
           </div>

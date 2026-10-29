@@ -21,7 +21,7 @@ const DECIMALS = 6;
 
 if (existsSync(join(ROOT, ".env"))) process.loadEnvFile(join(ROOT, ".env"));
 const seed = process.env.KINGA_TEST_SEED;
-if (!seed) throw new Error("KINGA_TEST_SEED missing from .env; run npm run spike:wdk once to create a test seed");
+if (!seed) console.log("No KINGA_TEST_SEED in .env: the optional USDT release is off (npm run spike:wdk turns it on).");
 const tokenAddress = process.env.KINGA_USDT_ADDRESS;
 
 // ---- model (on device) ----
@@ -53,28 +53,38 @@ const serialized = <T>(task: () => Promise<T>): Promise<T> => {
   return run;
 };
 
-// ---- wallet ----
-const wallet = await KingaWallet.open({
-  seed,
-  chainId: 11155111,
-  tokenAddress: tokenAddress ?? "0x0000000000000000000000000000000000000000",
-  tokenDecimals: DECIMALS,
-  perTransactionCap: parseUnits("200", DECIMALS),
-  dailyBudget: parseUnits("500", DECIMALS),
-  // KINGA_STATE lets the offline proof run against its own ledger.
-  statePath: process.env.KINGA_STATE ?? join(ROOT, ".kinga/wallet-state.json"),
-});
+// ---- wallet (optional: the USDT release needs a test seed, everything else does not) ----
 const rpc = new JsonRpc(SEPOLIA_RPCS);
-
-// Demo buyers are other accounts on the same test seed.
-const derive = new WDK(seed).registerWallet("derive", WalletManagerEvm, { chainId: 11155111 });
 const buyerAddress = new Map<string, string>();
-for (const order of DEMO_ORDERS) {
-  const account = await derive.getAccount("derive", order.buyerAccount);
-  buyerAddress.set(order.id, await account.getAddress());
-  if (order.repeatBuyer) wallet.allow(`${order.buyerKycName} (repeat buyer)`, buyerAddress.get(order.id)!);
+
+async function openWallet(seed: string) {
+  const opened = await KingaWallet.open({
+    seed,
+    chainId: 11155111,
+    tokenAddress: tokenAddress ?? "0x0000000000000000000000000000000000000000",
+    tokenDecimals: DECIMALS,
+    perTransactionCap: parseUnits("200", DECIMALS),
+    dailyBudget: parseUnits("500", DECIMALS),
+    // KINGA_STATE lets the offline proof run against its own ledger.
+    statePath: process.env.KINGA_STATE ?? join(ROOT, ".kinga/wallet-state.json"),
+  });
+  // Demo buyers are other accounts on the same test seed.
+  const derive = new WDK(seed).registerWallet("derive", WalletManagerEvm, { chainId: 11155111 });
+  for (const order of DEMO_ORDERS) {
+    const account = await derive.getAccount("derive", order.buyerAccount);
+    buyerAddress.set(order.id, await account.getAddress());
+    if (order.repeatBuyer) opened.allow(`${order.buyerKycName} (repeat buyer)`, buyerAddress.get(order.id)!);
+  }
+  derive.dispose();
+  return opened;
 }
-derive.dispose();
+const wallet = seed ? await openWallet(seed) : undefined;
+
+/** The wallet, for the release routes; without a test seed they answer 503 and the rest of Kinga works as usual. */
+function needWallet(): KingaWallet {
+  if (!wallet) throw new HttpError(503, "The USDT release is optional and off: run npm run spike:wdk once to create a test wallet, then restart.");
+  return wallet;
+}
 
 /** A look-alike of a saved address: same first and last four characters, different middle. */
 function poisoned(address: string): string {
@@ -169,13 +179,14 @@ async function releaseInputs(orderId: string, to: string) {
   const receiptCheck = checkRelease(
     { amountKsh: order.amountKsh, buyerKycName: order.buyerKycName, claimedCode: claim.code },
     inbox.items,
-    wallet.usedMpesaCodes(),
+    needWallet().usedMpesaCodes(),
   );
-  const addressVerdict = checkAddress(to, "evm", wallet.allowlist);
+  const addressVerdict = checkAddress(to, "evm", needWallet().allowlist);
   return { order, claim, receiptCheck, addressVerdict, amount: parseUnits(order.usdt, DECIMALS) };
 }
 
 function walletView() {
+  const wallet = needWallet();
   return {
     address: wallet.address,
     tokenConfigured: Boolean(tokenAddress),
@@ -211,7 +222,7 @@ const routes: [string, RegExp, Handler][] = [
   [
     "GET",
     /^\/api\/status$/,
-    async () => ({ model: modelStatus, reader: readerStatus, inbox: { source: inbox.source, messages: inbox.items.length, mpesa: inbox.ledger.entries.length }, wallet: walletView() }),
+    async () => ({ model: modelStatus, reader: readerStatus, inbox: { source: inbox.source, messages: inbox.items.length, mpesa: inbox.ledger.entries.length }, wallet: wallet ? walletView() : null }),
   ],
   ["GET", /^\/api\/claims$/, async () => DEMO_CLAIMS],
   [
@@ -291,7 +302,7 @@ const routes: [string, RegExp, Handler][] = [
         };
       }),
   ],
-  ["GET", /^\/api\/orders$/, async () => DEMO_ORDERS.map(orderView)],
+  ["GET", /^\/api\/orders$/, async () => (needWallet(), DEMO_ORDERS.map(orderView))],
   [
     "POST",
     /^\/api\/release\/check$/,
@@ -299,7 +310,7 @@ const routes: [string, RegExp, Handler][] = [
       const { orderId, to } = (await body(req)) as { orderId: string; to: string };
       const { order, claim, receiptCheck, addressVerdict, amount } = await releaseInputs(orderId, to);
       const chat = await verdictFor({ channel: "p2p_chat", sender: "P2P buyer", contact: null, text: order.chat.join("\n") }, true);
-      const gate = await wallet.preview({ orderId, mpesaCode: receiptCheck.receipt?.code ?? claim.code, to, amount, receiptCheck, addressVerdict });
+      const gate = await needWallet().preview({ orderId, mpesaCode: receiptCheck.receipt?.code ?? claim.code, to, amount, receiptCheck, addressVerdict });
       return { claim, receiptCheck, addressVerdict, chat, gate };
     },
   ],
@@ -328,17 +339,19 @@ const routes: [string, RegExp, Handler][] = [
         throw new HttpError(503, `The on-device screenshot reader ${why}. Try again, or check the payment in your M-PESA app.`);
       }
       // The transaction code is what gets looked up; the amount to expect comes from the order or the user, and
-      // only falls back to what the reader saw (a misread amount must not decide anything on its own).
+      // only falls back to what the reader saw. A misread amount must not decide anything on its own, so the UI
+      // turns a mismatch against the reader's amount into "compare it yourself", never "edited proof".
+      const expected = claim?.expectsKsh ?? (Number(amountKsh) || undefined);
       const check = checkRelease(
         {
-          amountKsh: claim?.expectsKsh ?? (Number(amountKsh) || screenshot.fields.amount),
+          amountKsh: expected ?? screenshot.fields.amount,
           buyerKycName: claim?.payerName ?? (buyerName || undefined),
           claimedCode: screenshot.fields.transaction_code,
         },
         inbox.items,
-        wallet.usedMpesaCodes(),
+        wallet?.usedMpesaCodes(),
       );
-      return { screenshot, check };
+      return { screenshot, check, amountFrom: expected === undefined ? "screenshot" : claim ? "claim" : "user" };
     },
   ],
   [
@@ -347,7 +360,7 @@ const routes: [string, RegExp, Handler][] = [
     async (req) => {
       const { orderId, to, humanApproved } = (await body(req)) as { orderId: string; to: string; humanApproved: boolean };
       const { order, receiptCheck, addressVerdict, amount } = await releaseInputs(orderId, to);
-      const outcome = await wallet.release({
+      const outcome = await needWallet().release({
         orderId,
         mpesaCode: receiptCheck.receipt?.code ?? order.claimedCode,
         to,
@@ -364,7 +377,7 @@ const routes: [string, RegExp, Handler][] = [
     /^\/api\/allowlist$/,
     async (req) => {
       const { label, address } = (await body(req)) as { label: string; address: string };
-      wallet.allow(String(label || "Saved address"), String(address));
+      needWallet().allow(String(label || "Saved address"), String(address));
       return walletView();
     },
   ],
@@ -372,7 +385,7 @@ const routes: [string, RegExp, Handler][] = [
     "POST",
     /^\/api\/network\/snapshot$/,
     async () => {
-      const balances = await wallet.refreshSnapshot(rpc);
+      const balances = await needWallet().refreshSnapshot(rpc);
       return { eth: formatUnits(balances.eth, 18), usdt: tokenAddress ? formatUnits(balances.usdt, DECIMALS) : null, wallet: walletView() };
     },
   ],
@@ -381,8 +394,8 @@ const routes: [string, RegExp, Handler][] = [
     /^\/api\/network\/broadcast$/,
     async () => {
       if (!tokenAddress) throw new HttpError(400, "Set KINGA_USDT_ADDRESS in .env to the Sepolia test USDT contract before broadcasting.");
-      const sent = await wallet.broadcastPending(rpc);
-      await wallet.confirmPending(rpc);
+      const sent = await needWallet().broadcastPending(rpc);
+      await needWallet().confirmPending(rpc);
       return { sent: sent.map((r) => r.txHash), wallet: walletView() };
     },
   ],

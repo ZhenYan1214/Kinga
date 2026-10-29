@@ -118,7 +118,7 @@ Earlier, a 400 px rendering misread Ksh6,500 as 5,000. That is why Kinga looks p
 - Reports: [dev](eval/reports/2026-10-28-14-58-dev.md), [test](eval/reports/2026-10-28-15-02-test.md).
 
 **Offline proof** (`npm run offline-proof`). The script starts Kinga, runs every demo message and order (including screenshot reading and an offline signature), and samples the TCP connections of every process Kinga starts (Node and QVAC's Bare worker) every 300 ms.
-- Result: **0 outbound connections**, with the network switched on ([report](eval/reports/offline-proof-2026-10-29-00-26.md)).
+- Result: **0 outbound connections**, with the network switched on ([report](eval/reports/offline-proof-2026-10-29-05-58.md)).
 - A `--control` run deliberately uses a network step, and the monitor catches it ([report](eval/reports/offline-proof-control-2026-10-28-13-56.md)).
 - `--wait-offline` runs it once Wi-Fi goes off.
 
@@ -139,6 +139,7 @@ Earlier, a 400 px rendering misread Ksh6,500 as 5,000. That is why Kinga looks p
   - [`spikes/`](spikes): model downloads and first experiments
   - [`eval/run.ts`](eval/run.ts): the message eval
 - **Measured on the test machine** with both models loaded and used: the QVAC worker process (`bare.exe`) used 4.2 GB of RAM (7.5 GB committed), and the whole GPU showed 6.9 GB in use, including the desktop's own apps. We suggest 8 GB of RAM or more and a GPU with Vulkan 1.4. CPU-only is untested.
+- **Why a vision model, not OCR:** proofs arrive as SMS-app screenshots, M-PESA app receipts, dark mode, cropped, or forwarded through WhatsApp, each with a different layout. OCR returns lines of text that would need a hand-written parser per layout; Qwen3-VL returns the six fields Kinga needs (code, amount, counterparty, direction, date, time) as JSON from all of them (see Results). Even so, only the transaction code is used to look the payment up: when you don't say what amount to expect, a different amount on the picture is shown as *check the amount* rather than *edited proof*, because a misread must never accuse anyone.
 - **Licences:** Qwen3-4B and Qwen3-VL-2B-Instruct are Apache-2.0 per their model cards. The Swahili-specialised AfriSLM model was not used, because its card lists financial use as out of scope.
 - **What did not work:**
   - Qwen3 4B's own Swahili was unusable (repetitive, meaningless sentences). Kiswahili mode therefore shows fixed wording written in advance for every verdict, reason and piece of advice. Model explanations stay in English, and the card says so.
@@ -183,18 +184,21 @@ npm install
 npm run models:download
 ```
 ```bash
-npm run spike:wdk
-```
-```bash
 npm run build:web
 ```
 ```bash
 npm start
 ```
 
-Then open http://127.0.0.1:8787.
+Then open http://127.0.0.1:8787. Checking payments, the ledger and the inbox guard need nothing else.
 
-- `npm run spike:wdk` creates a Sepolia test seed in `.env`; it never prints it.
+**Optional, for the USDT release tab:**
+
+```bash
+npm run spike:wdk
+```
+
+- It creates a Sepolia test seed in `.env` and never prints it; restart Kinga afterwards. Without it, the Release tab says it is off and everything else works the same. `npm run offline-proof` needs it, because it runs the release flow too.
 - To broadcast, also set `KINGA_USDT_ADDRESS` in `.env` to the Sepolia test USD₮ contract and fund the wallet address shown in the app.
 - `npm run demo:reset` clears the demo wallet's ledger between rehearsals.
 

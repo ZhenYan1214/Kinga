@@ -78,6 +78,8 @@ export interface PaymentCheck {
 export interface VerifyResult {
   screenshot: { fields: ScreenshotFields; ms: number };
   check: PaymentCheck;
+  /** Where the expected amount came from; "screenshot" means only the model's reading, which never proves an edit. */
+  amountFrom: "claim" | "user" | "screenshot";
 }
 
 export interface LedgerRow {
@@ -122,7 +124,8 @@ export interface Status {
   model: "disabled" | "loading" | "ready" | "failed";
   reader: "disabled" | "loading" | "ready" | "failed";
   inbox: InboxSource;
-  wallet: WalletView;
+  /** null when no test seed is set up: the USDT release is optional. */
+  wallet: WalletView | null;
 }
 
 async function call<T>(method: "GET" | "POST", path: string, body?: unknown): Promise<T> {

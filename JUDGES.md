@@ -15,21 +15,15 @@ npm install
 npm run models:download
 ```
 ```bash
-npm run spike:wdk
-```
-```bash
 npm run build:web
 ```
 ```bash
 npm start
 ```
 
-Open http://127.0.0.1:8787. These steps need the internet:
-- `npm install`
-- the model download (about 4 GB, once)
-- `spike:wdk`, which only writes a test seed to `.env`; it does not connect.
+Open http://127.0.0.1:8787. Only `npm install` and the model download (about 4 GB, once) need the internet. After that, turn Wi-Fi off; everything below works.
 
-After that, turn Wi-Fi off; everything below works.
+The **Release USDT** tab is optional. To try it, run `npm run spike:wdk` once (it only writes a test seed to `.env` and does not connect), then restart.
 
 ## What to click (2 minutes)
 
@@ -38,7 +32,7 @@ After that, turn Wi-Fi off; everything below works.
    - Then click **Brian** (*paid*), **Kevin** (*fake*, the code only exists in an SMS from a phone number), **Faith** (*paid by someone else*) and **Daniel** (*fake*).
    - Press **Kiswahili** to see every verdict in Swahili.
 2. **Your M-PESA ledger.** See why Daniel's message is fake even though it looks exactly like M-PESA: the balances before and after it add up without it. **Import your SMS** accepts an SMS Backup & Restore XML file.
-3. **Release USDT.** Order **P2P-1001** passes all checks and signs offline (it needs a nonce first; see below). Then press **Demo: paste a look-alike** and watch the release get blocked.
+3. **Release USDT** (optional, needs `spike:wdk`). Order **P2P-1001** passes all checks and signs offline (it needs a nonce first; see below). Then press **Demo: paste a look-alike** and watch the release get blocked.
 4. **Inbox guard.** Open the message from **0712300455** ("nimetuma 2,000 kimakosa…"). It is proven fake because no Ksh2,000 ever arrived.
 
 The model's status chips at the top say *on this device* once both models are loaded (about 10 to 30 s).
@@ -65,7 +59,7 @@ Nothing else connects anywhere. To check that yourself:
 npm run offline-proof
 ```
 
-It runs every demo flow and records every TCP connection made by Kinga's processes, including QVAC's worker. Result: **0** ([report](eval/reports/offline-proof-2026-10-29-00-26.md)). A `--control` run proves the monitor does catch a connection when one is made.
+It runs every demo flow and records every TCP connection made by Kinga's processes, including QVAC's worker. Result: **0** ([report](eval/reports/offline-proof-2026-10-29-05-58.md)). A `--control` run proves the monitor does catch a connection when one is made.
 
 ## Evidence
 
