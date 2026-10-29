@@ -8,10 +8,10 @@ import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import WDK from "@tetherto/wdk";
 import WalletManagerEvm from "@tetherto/wdk-wallet-evm";
-import { adviceFor, analyze, reasonInSwahili, checkAddress, checkRelease, fuse, MpesaLedger, type Message } from "@kinga/core";
+import { adviceFor, analyze, reasonInSwahili, checkAddress, checkRelease, fuse, MpesaLedger, parseSmsBackup, type Message } from "@kinga/core";
 import { KingaModel, ScreenshotReader, type ModelVerdict, type ScreenshotFields } from "@kinga/ai";
 import { formatUnits, JsonRpc, KingaWallet, parseUnits } from "@kinga/wallet";
-import { DEMO_INBOX, DEMO_ORDERS, type DemoOrder } from "./demo.js";
+import { DEMO_CLAIMS, DEMO_INBOX, DEMO_ORDERS, type DemoOrder, type InboxItem } from "./demo.js";
 
 const ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 const WEB_DIST = join(ROOT, "apps/web/dist");
@@ -95,11 +95,23 @@ interface Verdict {
 }
 
 const verdictCache = new Map<string, Verdict>();
-// The seller's own M-PESA history: the ground truth for every "I paid you" and "I sent it by mistake".
-const LEDGER = new MpesaLedger(DEMO_INBOX);
+
+// The inbox Kinga checks against: the demo data, or the user's own SMS export (kept in memory, never written to
+// disk). Its MPESA messages are the ground truth for every "I paid you" and "I sent it by mistake".
+let inbox: { source: "demo" | "imported"; items: InboxItem[]; ledger: MpesaLedger } = {
+  source: "demo",
+  items: DEMO_INBOX,
+  ledger: new MpesaLedger(DEMO_INBOX),
+};
+function useInbox(source: "demo" | "imported", items: InboxItem[]) {
+  inbox = { source, items, ledger: new MpesaLedger(items) };
+  verdictCache.clear();
+}
+/** The inbox page checks only the newest messages; a full phone export can hold thousands. */
+const INBOX_PAGE = 30;
 
 async function verdictFor(message: Message, useModel: boolean): Promise<Verdict> {
-  const rules = analyze(message, { ledger: LEDGER });
+  const rules = analyze(message, { ledger: inbox.ledger });
   let modelView: Verdict["model"];
   let modelNote: string | undefined;
   if (useModel) await modelReady;
@@ -156,7 +168,7 @@ async function releaseInputs(orderId: string, to: string) {
   const claim = await claimFor(order);
   const receiptCheck = checkRelease(
     { amountKsh: order.amountKsh, buyerKycName: order.buyerKycName, claimedCode: claim.code },
-    DEMO_INBOX,
+    inbox.items,
     wallet.usedMpesaCodes(),
   );
   const addressVerdict = checkAddress(to, "evm", wallet.allowlist);
@@ -196,13 +208,50 @@ const send = (res: ServerResponse, status: number, data: unknown) => {
 
 type Handler = (req: IncomingMessage, params: string[]) => Promise<unknown>;
 const routes: [string, RegExp, Handler][] = [
-  ["GET", /^\/api\/status$/, async () => ({ model: modelStatus, reader: readerStatus, wallet: walletView() })],
-  ["GET", /^\/api\/inbox$/, async () => DEMO_INBOX.map((m) => ({ ...m, verdict: verdictCache.get(m.id) ?? null }))],
+  [
+    "GET",
+    /^\/api\/status$/,
+    async () => ({ model: modelStatus, reader: readerStatus, inbox: { source: inbox.source, messages: inbox.items.length, mpesa: inbox.ledger.entries.length }, wallet: walletView() }),
+  ],
+  ["GET", /^\/api\/claims$/, async () => DEMO_CLAIMS],
+  [
+    "GET",
+    /^\/api\/inbox$/,
+    async () => inbox.items.slice(-INBOX_PAGE).reverse().map((m) => ({ ...m, verdict: verdictCache.get(m.id) ?? null })),
+  ],
+  [
+    "POST",
+    /^\/api\/inbox\/import$/,
+    async (req) => {
+      const { xml } = (await body(req)) as { xml?: string };
+      let sms;
+      try {
+        sms = parseSmsBackup(String(xml ?? ""));
+      } catch (error) {
+        throw new HttpError(400, (error as Error).message);
+      }
+      const items: InboxItem[] = sms.map((m, i) => ({
+        ...m,
+        id: `s${i}`,
+        time: new Date(m.receivedAt).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" }),
+      }));
+      useInbox("imported", items);
+      return { source: inbox.source, messages: items.length, mpesa: inbox.ledger.entries.length };
+    },
+  ],
+  [
+    "POST",
+    /^\/api\/inbox\/demo$/,
+    async () => {
+      useInbox("demo", DEMO_INBOX);
+      return { source: inbox.source, messages: DEMO_INBOX.length, mpesa: inbox.ledger.entries.length };
+    },
+  ],
   [
     "POST",
     /^\/api\/inbox\/(\w+)\/analyze$/,
     async (_req, [id]) => {
-      const message = DEMO_INBOX.find((m) => m.id === id);
+      const message = inbox.items.find((m) => m.id === id);
       if (!message) throw new HttpError(404, `no message ${id}`);
       const cached = verdictCache.get(message.id);
       if (cached?.model) return cached;
@@ -225,9 +274,9 @@ const routes: [string, RegExp, Handler][] = [
     /^\/api\/ledger$/,
     // The seller's M-PESA history in time order, with what the balance chain says about each message.
     async () =>
-      LEDGER.entries.map((e) => {
-        const check = LEDGER.check(e.message);
-        const item = DEMO_INBOX.find((m) => m === e.message);
+      inbox.ledger.entries.map((e) => {
+        const check = inbox.ledger.check(e.message);
+        const item = inbox.items.find((m) => m === e.message);
         return {
           id: item?.id,
           time: item?.time,
@@ -259,12 +308,12 @@ const routes: [string, RegExp, Handler][] = [
     /^\/api\/verify$/,
     async (req) => {
       // "Did they really pay?": read a payment screenshot on device, then check it against the ledger.
-      const { image, orderId, amountKsh, buyerName } = (await body(req)) as { image?: string; orderId?: string; amountKsh?: number; buyerName?: string };
+      const { image, claimId, amountKsh, buyerName } = (await body(req)) as { image?: string; claimId?: string; amountKsh?: number; buyerName?: string };
       let path: string;
-      const order = orderId ? DEMO_ORDERS.find((o) => o.id === orderId) : undefined;
-      if (orderId) {
-        if (!order) throw new HttpError(404, `no order ${orderId}`);
-        path = join(SCREENSHOT_DIR, order.screenshot);
+      const claim = claimId ? DEMO_CLAIMS.find((c) => c.id === claimId) : undefined;
+      if (claimId) {
+        if (!claim) throw new HttpError(404, `no demo claim ${claimId}`);
+        path = join(SCREENSHOT_DIR, claim.screenshot);
       } else {
         const match = image?.match(/^data:image\/(png|jpeg|jpg|webp);base64,(.+)$/);
         if (!match) throw new HttpError(400, "Send a PNG, JPEG or WebP screenshot.");
@@ -274,16 +323,19 @@ const routes: [string, RegExp, Handler][] = [
         writeFileSync(path, bytes);
       }
       const screenshot = await readScreenshot(path);
-      if (!screenshot) throw new HttpError(503, `The screenshot reader is ${readerStatus}; it could not read this image.`);
+      if (!screenshot) {
+        const why = { loading: "is still loading", failed: "failed to load", disabled: "is turned off", ready: "could not read this image" }[readerStatus];
+        throw new HttpError(503, `The on-device screenshot reader ${why}. Try again, or check the payment in your M-PESA app.`);
+      }
       // The transaction code is what gets looked up; the amount to expect comes from the order or the user, and
       // only falls back to what the reader saw (a misread amount must not decide anything on its own).
       const check = checkRelease(
         {
-          amountKsh: order?.amountKsh ?? (Number(amountKsh) || screenshot.fields.amount),
-          buyerKycName: order?.buyerKycName ?? (buyerName || undefined),
+          amountKsh: claim?.expectsKsh ?? (Number(amountKsh) || screenshot.fields.amount),
+          buyerKycName: claim?.payerName ?? (buyerName || undefined),
           claimedCode: screenshot.fields.transaction_code,
         },
-        DEMO_INBOX,
+        inbox.items,
         wallet.usedMpesaCodes(),
       );
       return { screenshot, check };
@@ -355,7 +407,7 @@ const server = createServer(async (req, res) => {
   try {
     // The demo orders' payment screenshots, for the UI to show next to what the reader extracted.
     const shot = path.match(/^\/api\/screenshots\/([\w-]+\.png)$/)?.[1];
-    if (shot && DEMO_ORDERS.some((o) => o.screenshot === shot)) {
+    if (shot && DEMO_CLAIMS.some((c) => c.screenshot === shot)) {
       res.writeHead(200, { "content-type": "image/png" });
       return res.end(readFileSync(join(SCREENSHOT_DIR, shot)));
     }

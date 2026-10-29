@@ -1,6 +1,7 @@
 // The user's M-PESA history as a balance chain: every genuine message must follow from the one before it.
+// The user can import their own SMS export; it stays on this device.
 import { useEffect, useState } from "react";
-import { api, type LedgerRow } from "./api";
+import { api, type InboxSource, type LedgerRow } from "./api";
 
 const money = (n: number) => n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -13,20 +14,60 @@ const STATUS: Record<LedgerRow["status"], { label: string; className: string }> 
 
 const KIND: Record<string, string> = { received: "Received from", sent: "Sent to", paybill: "Paybill", till: "Paid to", withdraw: "Withdrawn at", unknown: "Other" };
 
-export function Ledger() {
+export function Ledger({ source, onSource }: { source?: InboxSource; onSource: (s: InboxSource) => void }) {
   const [rows, setRows] = useState<LedgerRow[]>([]);
+  const [note, setNote] = useState<string>();
+  const [busy, setBusy] = useState(false);
+
   useEffect(() => {
     api.ledger().then(setRows, () => undefined);
-  }, []);
+  }, [source?.source, source?.messages]);
+
+  async function importFile(file: File | undefined) {
+    if (!file) return;
+    setBusy(true);
+    setNote(undefined);
+    try {
+      const result = await api.importInbox(await file.text());
+      onSource(result);
+      setNote(`Imported ${result.messages} received messages, ${result.mpesa} of them from MPESA. They stay on this device and are kept in memory only.`);
+    } catch (e) {
+      setNote((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function backToDemo() {
+    onSource(await api.useDemoInbox());
+    setNote(undefined);
+  }
+
   const forged = rows.filter((r) => r.status === "contradicts");
 
   return (
     <div className="card ledger">
-      <h3>Your M-PESA ledger</h3>
+      <div className="row">
+        <h3>{source?.source === "imported" ? "Your M-PESA ledger (imported)" : "M-PESA ledger (demo: Amina Hassan)"}</h3>
+        <div className="row buttons">
+          <label className="file-button">
+            {busy ? "Importing…" : "Import your SMS"}
+            <input type="file" accept=".xml,text/xml" disabled={busy} onChange={(e) => importFile(e.target.files?.[0])} />
+          </label>
+          {source?.source === "imported" && (
+            <button className="ghost" onClick={backToDemo}>
+              Back to demo data
+            </button>
+          )}
+        </div>
+      </div>
       <p className="muted small">
         Every M-PESA confirmation states your new balance, so each one must follow from the one before it. A forged message cannot know your real
-        balance, and the real messages around it still add up without it.
+        balance, and the real messages around it still add up without it. To use your own messages, export them on Android with the free app
+        "SMS Backup &amp; Restore" (XML) and import the file here. Only messages whose sender address is MPESA count; a number saved in your contacts
+        as "M-Pesa" does not.
       </p>
+      {note && <p className="small">{note}</p>}
       <table>
         <thead>
           <tr>
@@ -57,6 +98,7 @@ export function Ledger() {
           ))}
         </tbody>
       </table>
+      {rows.length === 0 && <p className="muted">No M-PESA messages with a balance were found.</p>}
       {forged.map((r, i) => (
         <p key={i} className="bad">
           <strong>{r.code}:</strong> {r.reason}

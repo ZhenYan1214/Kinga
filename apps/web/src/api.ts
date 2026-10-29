@@ -54,9 +54,24 @@ export interface ScreenshotFields {
   time: string;
 }
 
+export interface DemoClaim {
+  id: string;
+  who: string;
+  expectsKsh: number;
+  payerName: string;
+  screenshot: string;
+  story: string;
+}
+
+export interface InboxSource {
+  source: "demo" | "imported";
+  messages: number;
+  mpesa: number;
+}
+
 export interface PaymentCheck {
   ok: boolean;
-  issues: { code: string; reason: string }[];
+  issues: { code: string; reason: string; reasonSw: string }[];
   receipt?: { code?: string; amount?: number; counterparty?: string; date?: { day: number; month: number; year: number }; time?: string };
 }
 
@@ -106,6 +121,7 @@ export interface WalletView {
 export interface Status {
   model: "disabled" | "loading" | "ready" | "failed";
   reader: "disabled" | "loading" | "ready" | "failed";
+  inbox: InboxSource;
   wallet: WalletView;
 }
 
@@ -125,7 +141,10 @@ export const api = {
   inbox: () => call<InboxItem[]>("GET", "/api/inbox"),
   analyzeInbox: (id: string) => call<Verdict>("POST", `/api/inbox/${id}/analyze`),
   analyze: (m: { channel: string; sender: string; contact: string | null; text: string }) => call<Verdict>("POST", "/api/analyze", m),
-  verify: (input: { orderId?: string; image?: string; amountKsh?: number; buyerName?: string }) => call<VerifyResult>("POST", "/api/verify", input),
+  verify: (input: { claimId?: string; image?: string; amountKsh?: number; buyerName?: string }) => call<VerifyResult>("POST", "/api/verify", input),
+  claims: () => call<DemoClaim[]>("GET", "/api/claims"),
+  importInbox: (xml: string) => call<InboxSource>("POST", "/api/inbox/import", { xml }),
+  useDemoInbox: () => call<InboxSource>("POST", "/api/inbox/demo"),
   ledger: () => call<LedgerRow[]>("GET", "/api/ledger"),
   orders: () => call<Order[]>("GET", "/api/orders"),
   checkRelease: (orderId: string, to: string) => call<ReleaseCheckResult>("POST", "/api/release/check", { orderId, to }),

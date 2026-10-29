@@ -21,6 +21,13 @@ export interface Screenshot {
 
 export const SCREENSHOTS: Screenshot[] = [
   {
+    // The edited proof: the real message said Ksh20.00 (see the demo inbox); only the amount was changed.
+    file: "grace-rent.png",
+    layout: "sms",
+    truth: { code: "UJ6R4TG8NP", amount: 20000, counterparty: "AMINA HASSAN", direction: "sent" },
+    sms: "UJ6R4TG8NP Confirmed. Ksh20,000.00 sent to AMINA HASSAN 0722***514 on 27/10/26 at 9:10 AM. New M-PESA balance is Ksh1,480.00. Transaction cost, Ksh0.00. Amount you can transact within the day is 480,000.00.",
+  },
+  {
     file: "brian-sms.png",
     layout: "sms",
     truth: { code: "UJ7M2QK8TA", amount: 6500, counterparty: "AMINA HASSAN", direction: "sent" },

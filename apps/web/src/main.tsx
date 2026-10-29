@@ -1,6 +1,6 @@
 import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { api, type Order, type Status, type WalletView } from "./api";
+import { api, type InboxSource, type Status, type WalletView } from "./api";
 import { Inbox } from "./Inbox";
 import { Ledger } from "./Ledger";
 import { Release } from "./Release";
@@ -19,17 +19,18 @@ const TABS: [Tab, string][] = [
 function App() {
   const [tab, setTab] = useState<Tab>("verify");
   const [status, setStatus] = useState<Status>();
-  const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
     const load = () => api.status().then(setStatus, () => undefined);
     void load();
-    api.orders().then(setOrders, () => undefined);
     const timer = setInterval(load, 3000);
     return () => clearInterval(timer);
   }, []);
 
   const onWallet = (wallet: WalletView) => setStatus((s) => (s ? { ...s, wallet } : s));
+  const onInbox = (inbox: InboxSource) => setStatus((s) => (s ? { ...s, inbox } : s));
+  // Remount the inbox when the user imports their own messages or goes back to the demo data.
+  const inboxKey = `${status?.inbox.source}-${status?.inbox.messages}`;
   const modelText = { ready: "on this device", loading: "loading on this device…", failed: "failed to load", disabled: "off" };
 
   return (
@@ -58,10 +59,10 @@ function App() {
       <main className={tab === "release" ? "with-wallet" : ""}>
         {/* All stay mounted so switching tabs keeps results that are already computed. */}
         <div hidden={tab !== "verify"}>
-          <Verify orders={orders} />
+          <Verify inboxSource={status?.inbox} />
         </div>
         <div hidden={tab !== "ledger"}>
-          <Ledger />
+          <Ledger source={status?.inbox} onSource={onInbox} />
         </div>
         <div hidden={tab !== "release"}>
           <Release
@@ -70,7 +71,7 @@ function App() {
           />
         </div>
         <div hidden={tab !== "inbox"}>
-          <Inbox />
+          <Inbox key={inboxKey} />
         </div>
         {tab === "release" && <WalletPanel wallet={status?.wallet} onWallet={onWallet} />}
       </main>

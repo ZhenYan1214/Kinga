@@ -7,3 +7,4 @@ export * from "./release.js";
 export * from "./address.js";
 export * from "./advice.js";
 export * from "./ledger.js";
+export * from "./smsbackup.js";

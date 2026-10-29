@@ -628,3 +628,20 @@ mark {
     grid-template-columns: 1fr;
   }
 }
+
+.tone-wait {
+  border-left-color: var(--warn);
+  background: var(--warn-bg);
+}
+.file-button {
+  display: inline-block;
+  cursor: pointer;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 600;
+}
+.file-button input {
+  display: none;
+}

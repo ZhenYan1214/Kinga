@@ -1,6 +1,7 @@
 // Demo data for the two acts. Written for the demo, not taken from the eval set; all names, numbers and codes are invented.
-// The seller is AMINA HASSAN. Her MPESA messages form one consistent balance chain:
-// 11,730 (27 Oct) -> +6,500 -> +9,750 -> -450 -> -1,013 = 26,517, with one spoofed "MPESA" forgery (m12) in between.
+// The seller and landlady is AMINA HASSAN. Her MPESA messages form one consistent balance chain:
+// 13,253 (27 Oct, after Grace's Ksh20) -> -1,523 = 11,730 -> +6,500 -> +9,750 -> -450 -> -1,013 = 26,517,
+// with one spoofed "MPESA" forgery (m12) in between.
 import type { Message } from "@kinga/core";
 
 export interface InboxItem extends Message {
@@ -9,6 +10,14 @@ export interface InboxItem extends Message {
 }
 
 export const DEMO_INBOX: InboxItem[] = [
+  {
+    // The real rent "payment": Ksh20. Grace later shows Amina this message edited to Ksh20,000 (grace-rent.png).
+    id: "m00",
+    time: "27 Oct, 9:10 AM",
+    channel: "sms",
+    sender: "MPESA",
+    text: "UJ6R4TG8NP Confirmed.You have received Ksh20.00 from GRACE MUTHONI 0711***902 on 27/10/26 at 9:10 AM New M-PESA balance is Ksh13,253.00.",
+  },
   {
     id: "m01",
     time: "28 Oct, 4:12 PM",
@@ -177,4 +186,33 @@ export const DEMO_ORDERS: DemoOrder[] = [
     chat: ["Sent 20,000 from my M-Pesa, the SMS should already be on your phone. Kindly release."],
     story: "A perfect-looking 'MPESA' SMS is in your inbox, but your balances say the money never came.",
   },
+];
+
+/** Payment proofs someone shows Amina, for the "Did they really pay?" page. */
+export interface DemoClaim {
+  id: string;
+  who: string;
+  expectsKsh: number;
+  payerName: string;
+  screenshot: string;
+  story: string;
+}
+
+export const DEMO_CLAIMS: DemoClaim[] = [
+  {
+    id: "rent-grace",
+    who: "Grace, tenant: October rent",
+    expectsKsh: 20000,
+    payerName: "Grace Muthoni",
+    screenshot: "grace-rent.png",
+    story: "A real transaction, edited: she sent Ksh20 and changed the amount. Kenyan courts saw this exact trick twice in 2025.",
+  },
+  ...DEMO_ORDERS.map((o) => ({
+    id: o.id,
+    who: `${o.buyerKycName}: buys ${o.usdt} USDT`,
+    expectsKsh: o.amountKsh,
+    payerName: o.buyerKycName,
+    screenshot: o.screenshot,
+    story: o.story,
+  })),
 ];

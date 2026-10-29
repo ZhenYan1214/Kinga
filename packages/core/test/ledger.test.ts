@@ -101,3 +101,21 @@ describe("checkRelease with a ledger", () => {
     assert.match(r.issues[0]!.reason, /never entered your account/);
   });
 });
+
+describe("edited proofs and late messages", () => {
+  const RENT = mpesa("UJ6R4TG8NP Confirmed.You have received Ksh20.00 from GRACE MUTHONI 0711***902 on 27/10/26 at 9:10 AM New M-PESA balance is Ksh13,253.00.");
+
+  it("catches a real transaction code shown with an edited amount", () => {
+    const r = checkRelease({ amountKsh: 20000, buyerKycName: "Grace Muthoni", claimedCode: "UJ6R4TG8NP" }, [RENT, G1]);
+    assert.equal(r.ok, false);
+    assert.deepEqual(r.issues.map((i) => i.code), ["AMOUNT_MISMATCH"]);
+    assert.match(r.issues[0]!.reason, /Ksh20\.00, not the Ksh20,000\.00 expected.*edited/);
+    assert.match(r.issues[0]!.reasonSw, /umebadilishwa/);
+  });
+
+  it("says 'not yet' rather than 'fake' when a code has not arrived", () => {
+    const r = checkRelease({ amountKsh: 5000, claimedCode: "UJ9Z9Z9Z9Z" }, CHAIN);
+    assert.equal(r.issues[0]!.code, "CODE_NOT_IN_INBOX");
+    assert.match(r.issues[0]!.reason, /yet.*a few minutes late/);
+  });
+});

@@ -71,7 +71,7 @@ describe("erc20", () => {
 describe("release gate", () => {
   it("stops at each gate in order", async () => {
     const wallet = await openWallet();
-    const receipt: ReleaseCheck = { ok: false, issues: [{ code: "NAME_MISMATCH", reason: "payer differs" }] };
+    const receipt: ReleaseCheck = { ok: false, issues: [{ code: "NAME_MISMATCH", reason: "payer differs", reasonSw: "mlipaji ni tofauti" }] };
     assert.equal((await wallet.release(request("10", { receiptCheck: receipt }))) .ok, false);
     assert.deepEqual(await wallet.release(request("10", { receiptCheck: receipt })), { ok: false, stage: "receipt", reasons: ["payer differs"] });
     const poisoned: AddressVerdict = { kind: "poisoning", lookalike: { label: "Buyer", address: BUYER }, reason: "look-alike" };
