@@ -8,34 +8,74 @@ type Tone = "yes" | "no" | "wait" | "warn";
 
 const ksh = (n?: number) => (n === undefined ? "?" : `Ksh${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
 
+const DAY = 24 * 60;
+const ago = (minutes: number) => {
+  const days = Math.floor(minutes / DAY);
+  return { en: days === 1 ? "a day" : `${days} days`, sw: days === 1 ? "siku moja" : `siku ${days}` };
+};
+
 /** One headline per outcome, in English and in fixed Kiswahili wording (never model output). */
 function verdictOf(result: VerifyResult): { tone: Tone; en: string; sw: string } {
   const { check, screenshot } = result;
-  const code = screenshot.fields.transaction_code;
+  const code = result.code;
+  const real = ksh(check.receipt?.amount);
+  if (check.ok && (check.receiptAgeMinutes ?? 0) > DAY) {
+    // Safaricom's "old M-PESA message" fraud: a genuine payment from before, shown again for something new.
+    const age = ago(check.receiptAgeMinutes!);
+    return {
+      tone: "warn",
+      en: `Real, but old. ${real} from ${check.receipt?.counterparty} arrived ${age.en} before your latest M-PESA message. If this is for something new, an old payment is being shown again.`,
+      sw: `Ni ya kweli, lakini ya zamani. ${real} kutoka kwa ${check.receipt?.counterparty} ziliingia ${age.sw} kabla ya ujumbe wako wa mwisho wa M-PESA. Kama ni kwa jambo jipya, malipo ya zamani yanaonyeshwa tena.`,
+    };
+  }
   if (check.ok) {
     return {
       tone: "yes",
-      en: `Yes. ${ksh(check.receipt?.amount)} from ${check.receipt?.counterparty} is in your M-PESA.`,
-      sw: `Ndiyo. ${ksh(check.receipt?.amount)} kutoka kwa ${check.receipt?.counterparty} ziko kwenye M-PESA yako.`,
+      en: `Yes. ${real} from ${check.receipt?.counterparty} is in your M-PESA.`,
+      sw: `Ndiyo. ${real} kutoka kwa ${check.receipt?.counterparty} ziko kwenye M-PESA yako.`,
     };
   }
   const has = (c: string) => check.issues.some((i) => i.code === c);
   if (has("FORGED_IN_INBOX")) return { tone: "no", en: "Fake. This payment never reached your M-PESA.", sw: "Feki. Pesa hii haikuwahi kufika kwenye M-PESA yako." };
-  if (has("AMOUNT_MISMATCH") && result.amountFrom === "screenshot") {
-    // Nobody said what to expect, so the only other number is the model's reading, and that can be a misread.
-    const real = ksh(check.receipt?.amount);
-    const read = ksh(screenshot.fields.amount);
+  if (has("BALANCE_SAYS_FAKE")) {
+    return {
+      tone: "no",
+      en: "Almost certainly fake. Your balances add up without this payment.",
+      sw: "Karibu hakika ni feki. Salio zako zinalingana bila malipo haya.",
+    };
+  }
+  if (has("BALANCE_GAP")) {
+    return {
+      tone: "wait",
+      en: `Found ${code}, but your balance does not follow. Check *334# before handing anything over.`,
+      sw: `${code} imepatikana, lakini salio halifuatani. Angalia *334# kabla ya kutoa chochote.`,
+    };
+  }
+  if (has("AMOUNT_MISMATCH")) {
+    const shown = screenshot.fields.amount;
+    const expected = result.expectedKsh;
+    if (result.amountFrom !== "screenshot" && shown !== undefined && shown === check.receipt?.amount) {
+      // The picture and M-PESA agree; it is only less than expected. That is underpaying, not editing.
+      return {
+        tone: "warn",
+        en: `Underpaid. ${check.receipt?.code} is real and the proof shows it honestly: ${real}, not the ${ksh(expected)} you expected.`,
+        sw: `Amelipa pungufu. ${check.receipt?.code} ni ya kweli na ushahidi unaonyesha ukweli: ${real}, si ${ksh(expected)} ulizotarajia.`,
+      };
+    }
+    if (result.amountFrom !== "screenshot" && shown !== undefined && shown === expected) {
+      // Two independent numbers agree against M-PESA: what you were promised and what the picture says.
+      return {
+        tone: "no",
+        en: `Edited proof. Transaction ${check.receipt?.code} is real, but it was for ${real}, not the ${ksh(shown)} on the proof.`,
+        sw: `Ushahidi umebadilishwa. Muamala ${check.receipt?.code} ni wa kweli, lakini ulikuwa ${real}, si ${ksh(shown)} zilizo kwenye ushahidi.`,
+      };
+    }
+    // Otherwise the only other number may be a misread: let the person compare the picture.
+    const read = ksh(shown);
     return {
       tone: "warn",
       en: `Check the amount. Your M-PESA shows ${real} for ${check.receipt?.code}; the model read ${read} on the screenshot. Compare the picture yourself: if it says ${read}, it was edited.`,
       sw: `Angalia kiasi. M-PESA yako inaonyesha ${real} kwa ${check.receipt?.code}; modeli ilisoma ${read} kwenye picha. Linganisha picha mwenyewe: ikionyesha ${read}, imebadilishwa.`,
-    };
-  }
-  if (has("AMOUNT_MISMATCH")) {
-    return {
-      tone: "no",
-      en: `Edited proof. Transaction ${check.receipt?.code} is real, but it was for ${ksh(check.receipt?.amount)}.`,
-      sw: `Ushahidi umebadilishwa. Muamala ${check.receipt?.code} ni wa kweli, lakini ulikuwa ${ksh(check.receipt?.amount)}.`,
     };
   }
   if (has("CODE_NOT_IN_INBOX") || has("NO_RECEIPT")) {
@@ -58,8 +98,12 @@ const T = {
     reading: "Reading the screenshot on this device, then checking your M-PESA messages…",
     read: "What the on-device model read",
     model: "The model only reads the picture. Whether the money is real is decided by your own M-PESA messages, never by the model.",
-    reversal: "A real payment can still be reversed if the payer asks Safaricom. For large amounts, wait a little before handing over.",
-    matched: (code?: string) => `Matched ${code} in your inbox: from MPESA, the right amount, and its balance fits your history.`,
+    reversal: "Safaricom asks you before reversing a payment: if they call about this one, decline unless it really was sent by mistake.",
+    matched: (code?: string) => `Matched ${code} in your inbox: from MPESA, the right amount, and nothing in your balance history contradicts it.`,
+    arrived: (when: string) => `It arrived on ${when}.`,
+    seen: (time: string) => `You already checked this transaction at ${time}. Make sure it is not being used twice.`,
+    codeHint: "Transaction code, if the picture is unclear",
+    again: "Check again",
     toggle: "Kiswahili",
   },
   sw: {
@@ -68,8 +112,12 @@ const T = {
     reading: "Inasoma picha kwenye kifaa hiki, kisha inaangalia jumbe zako za M-PESA…",
     read: "Modeli iliyo kwenye kifaa ilisoma",
     model: "Modeli inasoma picha tu. Kama pesa ni ya kweli huamuliwa na jumbe zako za M-PESA, si na modeli.",
-    reversal: "Malipo ya kweli bado yanaweza kurudishwa mlipaji akiomba Safaricom. Kwa kiasi kikubwa, subiri kidogo kabla ya kutoa bidhaa.",
-    matched: (code?: string) => `${code} imepatikana kwenye jumbe zako: kutoka MPESA, kiasi sahihi, na salio linalingana na historia yako.`,
+    reversal: "Safaricom hukuuliza kabla ya kurudisha malipo: wakikupigia kuhusu haya, kataa isipokuwa kweli yalitumwa kimakosa.",
+    matched: (code?: string) => `${code} imepatikana kwenye jumbe zako: kutoka MPESA, kiasi sahihi, na hakuna kwenye historia ya salio kinachopingana nayo.`,
+    arrived: (when: string) => `Iliingia tarehe ${when}.`,
+    seen: (time: string) => `Tayari uliangalia muamala huu saa ${time}. Hakikisha hautumiki mara mbili.`,
+    codeHint: "Code ya muamala, kama picha haionekani vizuri",
+    again: "Angalia tena",
     toggle: "English",
   },
 };
@@ -82,6 +130,7 @@ export function Verify({ inboxSource }: { inboxSource?: InboxSource }) {
   const [error, setError] = useState<string>();
   const [amount, setAmount] = useState("");
   const [payer, setPayer] = useState("");
+  const [code, setCode] = useState("");
   const [sw, setSw] = useState(false);
   const t = T[sw ? "sw" : "en"];
 
@@ -99,7 +148,7 @@ export function Verify({ inboxSource }: { inboxSource?: InboxSource }) {
         await api.verify(
           next.kind === "demo"
             ? { claimId: next.claim.id }
-            : { image: next.dataUrl, amountKsh: Number(amount) || undefined, buyerName: payer || undefined },
+            : { image: next.dataUrl, amountKsh: Number(amount) || undefined, buyerName: payer || undefined, code: code || undefined },
         ),
       );
     } catch (e) {
@@ -118,12 +167,14 @@ export function Verify({ inboxSource }: { inboxSource?: InboxSource }) {
 
   const image = source?.kind === "demo" ? `/api/screenshots/${source.claim.screenshot}` : source?.dataUrl;
   const verdict = result && verdictOf(result);
+  const when = result?.check.receipt;
+  const arrival = when?.date && `${when.date.day}/${when.date.month}/${when.date.year}${when.time ? ` ${when.time}` : ""}`;
   const shownIssues =
     result?.check.issues.filter(
       (i, _n, all) =>
         !(i.code === "CODE_NOT_IN_INBOX" && all.some((j) => j.code === "FORGED_IN_INBOX")) &&
-        // The headline already says it, without the "it was edited" the core reason assumes.
-        !(i.code === "AMOUNT_MISMATCH" && result.amountFrom === "screenshot"),
+        // The headline compares the amounts itself; the core reason assumes the proof showed the expected amount.
+        i.code !== "AMOUNT_MISMATCH",
     ) ?? [];
 
   return (
@@ -151,9 +202,22 @@ export function Verify({ inboxSource }: { inboxSource?: InboxSource }) {
         <details className="upload">
           <summary>{t.upload}</summary>
           <div className="form">
-            <input placeholder="Amount you expect (Ksh), recommended"value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ""))} />
+            <input placeholder="Amount you expect (Ksh), recommended" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ""))} />
             <input placeholder="Name of the person who says they paid, optional" value={payer} onChange={(e) => setPayer(e.target.value)} />
-            <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => upload(e.target.files?.[0])} />
+            <input placeholder={t.codeHint} className="mono" value={code} onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 10))} />
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              onChange={(e) => {
+                upload(e.target.files?.[0]);
+                e.target.value = ""; // so picking the same file again checks it again
+              }}
+            />
+            {source?.kind === "upload" && (
+              <button disabled={busy} onClick={() => void check(source)}>
+                {t.again}
+              </button>
+            )}
           </div>
         </details>
       </section>
@@ -179,10 +243,13 @@ export function Verify({ inboxSource }: { inboxSource?: InboxSource }) {
               )}
               {result.check.ok && (
                 <>
-                  <p className="small">{t.matched(result.check.receipt?.code)}</p>
+                  <p className="small">
+                    {t.matched(result.check.receipt?.code)} {arrival && t.arrived(arrival)}
+                  </p>
                   <p className="small muted">{t.reversal}</p>
                 </>
               )}
+              {result.firstCheckedAt && <p className="small">{t.seen(new Date(result.firstCheckedAt).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }))}</p>}
             </div>
             <div className="card">
               <h4>

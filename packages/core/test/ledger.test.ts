@@ -97,8 +97,39 @@ describe("checkRelease with a ledger", () => {
     const fake = forged("41,230.00");
     const r = checkRelease({ amountKsh: 13000, buyerKycName: "Kevin Mutua", claimedCode: "UJ7P9XK3LC" }, [...CHAIN.slice(0, 3), fake, G4]);
     assert.equal(r.ok, false);
-    assert.equal(r.issues[0]!.code, "FORGED_IN_INBOX");
-    assert.match(r.issues[0]!.reason, /never entered your account/);
+    assert.deepEqual(r.issues.map((i) => i.code), ["BALANCE_SAYS_FAKE"]);
+    assert.match(r.issues[0]!.reason, /almost certainly never entered your account.*\*334#/);
+  });
+});
+
+describe("missing messages never turn a genuine payment into 'not there'", () => {
+  const rec = (code: string, amount: string, balance: string, time: string, from = "GRACE MUTHONI") =>
+    mpesa(`${code} Confirmed.You have received Ksh${amount} from ${from} 0711***902 on 28/10/26 at ${time} New M-PESA balance is Ksh${balance}.`);
+
+  it("says the balance does not follow, not 'no message yet', for the newest payment after a gap", () => {
+    // A Ksh300 payment between these two is missing from the export.
+    const inbox = [rec("UJ3AAAAAAA", "100.00", "1,000.00", "9:00 AM"), rec("UJ3BBBBBBB", "500.00", "1,200.00", "2:00 PM")];
+    const r = checkRelease({ amountKsh: 500, buyerKycName: "Grace Muthoni", claimedCode: "UJ3BBBBBBB" }, inbox);
+    assert.deepEqual(r.issues.map((i) => i.code), ["BALANCE_GAP"]);
+    assert.equal(r.receipt?.code, "UJ3BBBBBBB");
+    assert.match(r.issues[0]!.reason, /has a message with code UJ3BBBBBBB.*\*334#/);
+  });
+
+  it("calls a payment that the balances leave out 'almost certainly' fake, with *334# as the deciding check", () => {
+    // A genuine Ksh500 in, and a missing Ksh500 till payment before it, look exactly like a forgery.
+    const till = mpesa("UJ1CCCCCCC Confirmed. Ksh200.00 paid to NAIVAS MOI AVENUE. on 28/10/26 at 1:00 PM.New M-PESA balance is Ksh800.00. Transaction cost, Ksh0.00.");
+    const inbox = [rec("UJ1AAAAAAA", "100.00", "1,000.00", "9:00 AM"), rec("UJ1BBBBBBB", "500.00", "1,000.00", "11:00 AM"), till];
+    const r = checkRelease({ amountKsh: 500, claimedCode: "UJ1BBBBBBB" }, inbox);
+    assert.equal(r.issues[0]!.code, "BALANCE_SAYS_FAKE");
+    assert.match(r.issues[0]!.reason, /almost certainly/);
+  });
+
+  it("reports how long before the newest message a payment arrived", () => {
+    const old = rec("UJ5AAAAAAA", "6,500.00", "7,500.00", "9:00 AM");
+    const newer = mpesa("UJ5BBBBBBB Confirmed. Ksh450.00 paid to NAIVAS MOI AVENUE. on 30/10/26 at 9:00 AM.New M-PESA balance is Ksh7,050.00. Transaction cost, Ksh0.00.");
+    const r = checkRelease({ amountKsh: 6500, claimedCode: "UJ5AAAAAAA" }, [old, newer]);
+    assert.equal(r.ok, true);
+    assert.equal(r.receiptAgeMinutes, 2 * 24 * 60);
   });
 });
 

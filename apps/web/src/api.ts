@@ -73,6 +73,8 @@ export interface PaymentCheck {
   ok: boolean;
   issues: { code: string; reason: string; reasonSw: string }[];
   receipt?: { code?: string; amount?: number; counterparty?: string; date?: { day: number; month: number; year: number }; time?: string };
+  /** Minutes between this payment and the newest M-PESA message. */
+  receiptAgeMinutes?: number;
 }
 
 export interface VerifyResult {
@@ -80,6 +82,11 @@ export interface VerifyResult {
   check: PaymentCheck;
   /** Where the expected amount came from; "screenshot" means only the model's reading, which never proves an edit. */
   amountFrom: "claim" | "user" | "screenshot";
+  /** The transaction code that was looked up: typed by the user, or read from the picture. */
+  code: string;
+  expectedKsh?: number;
+  /** Set when this transaction code was already checked earlier in this session. */
+  firstCheckedAt?: string;
 }
 
 export interface LedgerRow {
@@ -144,7 +151,7 @@ export const api = {
   inbox: () => call<InboxItem[]>("GET", "/api/inbox"),
   analyzeInbox: (id: string) => call<Verdict>("POST", `/api/inbox/${id}/analyze`),
   analyze: (m: { channel: string; sender: string; contact: string | null; text: string }) => call<Verdict>("POST", "/api/analyze", m),
-  verify: (input: { claimId?: string; image?: string; amountKsh?: number; buyerName?: string }) => call<VerifyResult>("POST", "/api/verify", input),
+  verify: (input: { claimId?: string; image?: string; amountKsh?: number; buyerName?: string; code?: string }) => call<VerifyResult>("POST", "/api/verify", input),
   claims: () => call<DemoClaim[]>("GET", "/api/claims"),
   importInbox: (xml: string) => call<InboxSource>("POST", "/api/inbox/import", { xml }),
   useDemoInbox: () => call<InboxSource>("POST", "/api/inbox/demo"),

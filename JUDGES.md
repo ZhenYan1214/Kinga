@@ -29,7 +29,8 @@ The **Release USDT** tab is optional. To try it, run `npm run spike:wdk` once (i
 
 1. **Did they really pay?**
    - Click **Grace**. You get *Edited proof*: the transaction is real but was for Ksh20, not Ksh20,000. This is the trick from two 2025 Kenyan court cases.
-   - Then click **Brian** (*paid*), **Kevin** (*fake*, the code only exists in an SMS from a phone number), **Faith** (*paid by someone else*) and **Daniel** (*fake*).
+   - Then click **Brian** (*paid*), **Kevin** (*fake*, the code only exists in an SMS from a phone number), **Faith** (*paid by someone else*) and **Daniel** (*almost certainly fake*: the balances add up without it).
+   - Try **Upload a screenshot** with one of the PNGs in `eval/data/screenshots/` and no amount: Kinga asks you to compare instead of accusing. Upload Brian's proof with an expected amount of 8,000: *underpaid*, not *edited*.
    - Press **Kiswahili** to see every verdict in Swahili.
 2. **Your M-PESA ledger.** See why Daniel's message is fake even though it looks exactly like M-PESA: the balances before and after it add up without it. **Import your SMS** accepts an SMS Backup & Restore XML file.
 3. **Release USDT** (optional, needs `spike:wdk`). Order **P2P-1001** passes all checks and signs offline (it needs a nonce first; see below). Then press **Demo: paste a look-alike** and watch the release get blocked.
@@ -59,7 +60,7 @@ Nothing else connects anywhere. To check that yourself:
 npm run offline-proof
 ```
 
-It runs every demo flow and records every TCP connection made by Kinga's processes, including QVAC's worker. Result: **0** ([report](eval/reports/offline-proof-2026-10-29-05-58.md)). A `--control` run proves the monitor does catch a connection when one is made.
+It runs every demo flow and records every TCP connection made by Kinga's processes, including QVAC's worker. Result: **0** ([report](eval/reports/offline-proof-2026-10-29-07-57.md)). A `--control` run proves the monitor does catch a connection when one is made.
 
 ## Evidence
 
@@ -72,7 +73,8 @@ It runs every demo flow and records every TCP connection made by Kinga's process
 
 - **Synthetic data.** All data is synthetic, and M-PESA formats come from secondary sources.
 - **"Not yet", never "fake", for a missing code.** M-PESA messages can be minutes late, so a missing code is reported as *not in your M-PESA yet*.
-- **Paid can still be reversed.** A genuine payment can still be reversed, so *paid* carries that warning.
+- **Balance evidence is strong, not absolute.** Missing messages can make a genuine payment look wrong, so balance-only verdicts say *almost certainly* or *balance doesn't follow* and point to *334#.
+- **Old payments shown again** are flagged when a real payment arrived more than a day before the latest M-PESA message.
 - **Desktop build.** A phone app would read the inbox directly; here you import an SMS export.
 - **Kiswahili** wording awaits review by a native speaker.
 

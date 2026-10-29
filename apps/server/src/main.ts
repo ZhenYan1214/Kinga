@@ -2,7 +2,7 @@
 // outbound traffic is the two wallet network steps (/api/network/*), which the UI labels and the user triggers.
 // npm run dev:server   (KINGA_NO_MODEL=1 skips the model for quick UI work)
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -154,6 +154,8 @@ function orderView(order: DemoOrder) {
 const SCREENSHOT_DIR = join(ROOT, "eval/data/screenshots");
 const UPLOAD_DIR = join(ROOT, ".kinga/uploads");
 const screenshotCache = new Map<string, { fields: ScreenshotFields; ms: number }>();
+/** When each transaction code was first checked here, so the same proof shown twice is noticed. Memory only. */
+const firstChecked = new Map<string, string>();
 
 /** Reads a screenshot on device; cached per file. undefined when the reader is unavailable or fails. */
 async function readScreenshot(path: string) {
@@ -319,7 +321,13 @@ const routes: [string, RegExp, Handler][] = [
     /^\/api\/verify$/,
     async (req) => {
       // "Did they really pay?": read a payment screenshot on device, then check it against the ledger.
-      const { image, claimId, amountKsh, buyerName } = (await body(req)) as { image?: string; claimId?: string; amountKsh?: number; buyerName?: string };
+      const { image, claimId, amountKsh, buyerName, code } = (await body(req)) as {
+        image?: string;
+        claimId?: string;
+        amountKsh?: number;
+        buyerName?: string;
+        code?: string;
+      };
       let path: string;
       const claim = claimId ? DEMO_CLAIMS.find((c) => c.id === claimId) : undefined;
       if (claimId) {
@@ -333,7 +341,8 @@ const routes: [string, RegExp, Handler][] = [
         path = join(UPLOAD_DIR, `${createHash("sha256").update(bytes).digest("hex").slice(0, 16)}.${match[1] === "jpg" ? "jpeg" : match[1]}`);
         writeFileSync(path, bytes);
       }
-      const screenshot = await readScreenshot(path);
+      // An uploaded proof is deleted as soon as it has been read; only the extracted fields stay, in memory.
+      const screenshot = await readScreenshot(path).finally(() => !claimId && rmSync(path, { force: true }));
       if (!screenshot) {
         const why = { loading: "is still loading", failed: "failed to load", disabled: "is turned off", ready: "could not read this image" }[readerStatus];
         throw new HttpError(503, `The on-device screenshot reader ${why}. Try again, or check the payment in your M-PESA app.`);
@@ -342,16 +351,30 @@ const routes: [string, RegExp, Handler][] = [
       // only falls back to what the reader saw. A misread amount must not decide anything on its own, so the UI
       // turns a mismatch against the reader's amount into "compare it yourself", never "edited proof".
       const expected = claim?.expectsKsh ?? (Number(amountKsh) || undefined);
+      // Without a code there is nothing to look up: matching on the amount alone would accept any old payment.
+      const claimedCode = String(code ?? "").replace(/\s/g, "").toUpperCase() || screenshot.fields.transaction_code;
+      if (!claimedCode) {
+        throw new HttpError(422, "The transaction code is not readable on this picture. Type the 10-character code from the proof (like UJ7M2QK8TA) and check again.");
+      }
       const check = checkRelease(
         {
           amountKsh: expected ?? screenshot.fields.amount,
           buyerKycName: claim?.payerName ?? (buyerName || undefined),
-          claimedCode: screenshot.fields.transaction_code,
+          claimedCode,
         },
         inbox.items,
         wallet?.usedMpesaCodes(),
       );
-      return { screenshot, check, amountFrom: expected === undefined ? "screenshot" : claim ? "claim" : "user" };
+      const seen = check.receipt?.code ? firstChecked.get(check.receipt.code) : undefined;
+      if (check.receipt?.code && !seen) firstChecked.set(check.receipt.code, new Date().toISOString());
+      return {
+        screenshot,
+        check,
+        code: claimedCode,
+        amountFrom: expected === undefined ? "screenshot" : claim ? "claim" : "user",
+        expectedKsh: expected ?? screenshot.fields.amount,
+        firstCheckedAt: seen,
+      };
     },
   ],
   [
@@ -415,8 +438,17 @@ function serveStatic(path: string, res: ServerResponse) {
   res.end(readFileSync(target));
 }
 
+// Only this machine's own pages may talk to Kinga: a Host check stops DNS rebinding, an Origin check stops other
+// web pages (the inbox can hold OTPs, and the release routes sign transactions). 5173 is the Vite dev server.
+const LOCAL_HOSTS = new Set([PORT, 5173].flatMap((p) => [`127.0.0.1:${p}`, `localhost:${p}`]));
+const fromThisMachine = (req: IncomingMessage) => {
+  const origin = req.headers.origin;
+  return LOCAL_HOSTS.has(req.headers.host ?? "") && (!origin || LOCAL_HOSTS.has(origin.replace(/^https?:\/\//, "")));
+};
+
 const server = createServer(async (req, res) => {
   const path = new URL(req.url ?? "/", "http://localhost").pathname;
+  if (!fromThisMachine(req)) return send(res, 403, { error: "Kinga only answers pages served from this machine." });
   try {
     // The demo orders' payment screenshots, for the UI to show next to what the reader extracted.
     const shot = path.match(/^\/api\/screenshots\/([\w-]+\.png)$/)?.[1];

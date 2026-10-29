@@ -17,6 +17,8 @@ export type ReleaseIssueCode =
   | "NO_RECEIPT"
   | "CODE_NOT_IN_INBOX"
   | "FORGED_IN_INBOX"
+  | "BALANCE_SAYS_FAKE"
+  | "BALANCE_GAP"
   | "AMOUNT_MISMATCH"
   | "NAME_MISMATCH"
   | "CODE_ALREADY_USED";
@@ -34,6 +36,8 @@ export interface ReleaseCheck {
   ok: boolean;
   receipt?: MpesaReceipt;
   issues: ReleaseIssue[];
+  /** Minutes between the receipt and the newest M-PESA message: a large gap means an old payment shown again. */
+  receiptAgeMinutes?: number;
 }
 
 const tokens = (name: string) =>
@@ -74,11 +78,34 @@ export function checkRelease(order: P2pOrder, inbox: readonly Message[], usedCod
         reasonSw: `Code ${claimed} inaonekana tu kwenye ujumbe kutoka ${forged.sender}, si kutoka MPESA. Ujumbe huo ni feki.`,
       });
     } else if (spoofed) {
-      issues.push({
-        code: "FORGED_IN_INBOX",
-        reason: `A message with code ${claimed} claims to come from MPESA, but your balances prove it never happened: ${ledger.check(spoofed).reason}`,
-        reasonSw: `Ujumbe wenye code ${claimed} unajifanya kutoka MPESA, lakini salio zako zinaonyesha pesa hiyo haikuwahi kuingia.`,
-      });
+      // Strong evidence, not proof: a genuine payment followed by a missing message of exactly the same amount
+      // would look the same. So the advice is the one check Kinga cannot do itself: the balance on *334#.
+      return {
+        ok: false,
+        issues: [
+          {
+            code: "BALANCE_SAYS_FAKE",
+            reason: `A message with code ${claimed} claims to come from MPESA, but ${ledger.check(spoofed).reason.replace(/^Your/, "your").replace("never entered", "almost certainly never entered")} Check your balance with *334# before handing anything over.`,
+            reasonSw: `Ujumbe wenye code ${claimed} unajifanya kutoka MPESA, lakini salio zako zinalingana bila huo, kwa hiyo pesa hiyo karibu hakika haikuingia. Angalia salio kwa *334# kabla ya kutoa chochote.`,
+          },
+        ],
+      };
+    } else {
+      // From MPESA, but its balance does not follow from the one before: a message may be missing, or it is forged.
+      const gap = withCode.find((m) => isMpesaSender(m.sender) && ledger.check(m).status === "does_not_fit");
+      if (gap) {
+        return {
+          ok: false,
+          receipt: parseMpesaReceipt(gap.text),
+          issues: [
+            {
+              code: "BALANCE_GAP",
+              reason: `Your M-PESA has a message with code ${claimed}, but ${ledger.check(gap).reason.replace(/^Its/, "its")} Check your balance with *334# before handing anything over.`,
+              reasonSw: `M-PESA yako ina ujumbe wenye code ${claimed}, lakini salio lake halifuati salio lako la awali: huenda jumbe zinakosekana, au ni feki. Angalia salio kwa *334# kabla ya kutoa chochote.`,
+            },
+          ],
+        };
+      }
     }
   }
 
@@ -119,8 +146,8 @@ export function checkRelease(order: P2pOrder, inbox: readonly Message[], usedCod
   if (buyer && (!receipt.counterparty || !namesMatch(receipt.counterparty, buyer))) {
     issues.push({
       code: "NAME_MISMATCH",
-      reason: `The money came from ${receipt.counterparty ?? "an unknown payer"}, not from the buyer ${buyer}. This is how triangular fraud starts: the real payer may later report you.`,
-      reasonSw: `Pesa ilitoka kwa ${receipt.counterparty ?? "mlipaji asiyejulikana"}, si kwa mnunuzi ${buyer}. Hivi ndivyo udanganyifu wa pembetatu unavyoanza: mlipaji halisi anaweza kukuripoti baadaye.`,
+      reason: `The money came from ${receipt.counterparty ?? "an unknown payer"}, not from the buyer ${buyer}. This is how triangular fraud starts: the real payer may later report you. To see who really paid, forward the M-PESA message to 334 within 24 hours; Safaricom asks the payer to share their full name.`,
+      reasonSw: `Pesa ilitoka kwa ${receipt.counterparty ?? "mlipaji asiyejulikana"}, si kwa mnunuzi ${buyer}. Hivi ndivyo udanganyifu wa pembetatu unavyoanza: mlipaji halisi anaweza kukuripoti baadaye. Kujua aliyelipa kweli, tuma ujumbe huo wa M-PESA kwa 334 ndani ya saa 24; Safaricom itamwomba mlipaji ashiriki jina lake kamili.`,
     });
   }
   if (receipt.code && usedCodes.has(receipt.code)) {
@@ -130,5 +157,7 @@ export function checkRelease(order: P2pOrder, inbox: readonly Message[], usedCod
       reasonSw: `Risiti ${receipt.code} tayari imetumika kuachilia oda iliyotangulia.`,
     });
   }
-  return { ok: issues.length === 0, receipt, issues };
+  const at = ledger.entries.find((e) => e.receipt.code === receipt.code)?.at;
+  const newest = ledger.latest();
+  return { ok: issues.length === 0, receipt, issues, receiptAgeMinutes: at !== undefined && newest !== undefined ? newest - at : undefined };
 }

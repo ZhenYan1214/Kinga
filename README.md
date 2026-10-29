@@ -30,16 +30,24 @@ The advice is old: don't trust the screenshot, check your own M-PESA. Kinga does
  your own M-PESA SMS ──────────────────────────────────────────┤
                                                                ▼
    1. Is a message with that code in your inbox, from the real MPESA sender?   (not a number saved as "M-Pesa")
-   2. Is the amount the same?                       → if not: the proof was edited
+   2. Is the amount the same?        → if the proof shows more than M-PESA: edited; if both show less: underpaid
    3. Did it come from the person who says they paid?   → if not: triangular fraud
-   4. Does its balance fit the balances before and after it?   → if not: a forged "MPESA" message
+   4. Does its balance fit the balances before and after it?   → if not: almost certainly a forged "MPESA" message
+   5. Did it arrive recently?                         → if not: an old payment shown again
                                                                ▼
-           paid  ·  edited proof  ·  not in your M-PESA yet  ·  paid by someone else  ·  fake
+   paid · edited · underpaid · not in your M-PESA yet · paid by someone else · old payment · balance doesn't follow · fake
 ```
 
 - **Checks 1 to 3: matching the proof.** These catch every documented attack: a text from a phone number, a forwarded or edited screenshot, an edited real message, or a number saved in the victim's contacts as "M-Pesa".
 - **Check 4: the balance chain.** Every genuine M-PESA confirmation states the new balance, so each must follow from the one before. A forger cannot know your real balance, and the genuine messages around a forgery still add up without it. This second layer covers a forged message that sits in your inbox under the real MPESA sender. We found no Kenyan case of that, so we do not claim it is common.
-- **Honest outcomes.** M-PESA messages can arrive minutes late, so a code that is missing reads as *not in your M-PESA yet*, never as fake. "Fake" needs proof. A payment that did arrive can still be reversed if the payer asks Safaricom, so *paid* comes with that warning.
+- **Honest outcomes.** Kinga only says what your messages can support:
+  - A missing code reads as *not in your M-PESA yet*, never as fake, because M-PESA messages can arrive minutes late.
+  - *Fake* needs proof: the code only exists in a message from a phone number. When only the balances speak against a message, it is *almost certainly fake*, with *334# (your real balance) as the deciding check, because a genuine payment next to a missing message of exactly the same amount would look the same.
+  - A message from MPESA whose balance does not follow from the one before (a message may be missing) reads as *balance doesn't follow: check *334#*, never as *not there*.
+  - *Edited* needs two numbers against M-PESA: what you expected and what the proof shows. If only the model's reading differs, Kinga asks you to compare the picture, because a misread must never accuse anyone. If the proof honestly shows less than you expected, that is *underpaid*.
+  - A real payment that arrived more than a day before your latest M-PESA message is flagged as possibly *an old payment shown again*, which Safaricom lists as its own fraud type. A code checked twice is pointed out.
+  - Without a readable code there is nothing to look up, so Kinga asks you to type it instead of matching on the amount.
+  - *Paid* adds that Safaricom asks the receiver before reversing a payment, so decline such a call unless it really was a mistake. When the payer's name does not match, Kinga suggests forwarding the message to 334, which asks the payer to share their full name (Safaricom, since March 2026).
 
 The models only read and explain; they never decide that money is real:
 - **Qwen3-VL 2B** turns a screenshot (SMS or M-PESA app) into a code, amount, name and direction. Rules cannot read pictures.
@@ -67,7 +75,7 @@ The models only read and explain; they never decide that money is real:
 | Brian: buys 50 USDT | **Paid.** The release can be signed offline. |
 | Kevin: buys 100 USDT | **Fake.** The code only exists in an SMS from a phone number. |
 | Faith: buys 75 USDT | **Paid by someone else** (PETER NJOROGE): triangular fraud. |
-| Daniel: buys 150 USDT | **Fake.** A perfect-looking "MPESA" SMS is in the inbox, but the balances before and after it add up without it. |
+| Daniel: buys 150 USDT | **Almost certainly fake.** A perfect-looking "MPESA" SMS is in the inbox, but the balances before and after it add up without it. Check *334#. |
 
 | Ledger | Release USDT |
 |---|---|
@@ -118,7 +126,7 @@ Earlier, a 400 px rendering misread Ksh6,500 as 5,000. That is why Kinga looks p
 - Reports: [dev](eval/reports/2026-10-28-14-58-dev.md), [test](eval/reports/2026-10-28-15-02-test.md).
 
 **Offline proof** (`npm run offline-proof`). The script starts Kinga, runs every demo message and order (including screenshot reading and an offline signature), and samples the TCP connections of every process Kinga starts (Node and QVAC's Bare worker) every 300 ms.
-- Result: **0 outbound connections**, with the network switched on ([report](eval/reports/offline-proof-2026-10-29-05-58.md)).
+- Result: **0 outbound connections**, with the network switched on ([report](eval/reports/offline-proof-2026-10-29-07-57.md)).
 - A `--control` run deliberately uses a network step, and the monitor catches it ([report](eval/reports/offline-proof-control-2026-10-28-13-56.md)).
 - `--wait-offline` runs it once Wi-Fi goes off.
 
@@ -138,7 +146,7 @@ Earlier, a 400 px rendering misread Ksh6,500 as 5,000. That is why Kinga looks p
   - [`apps/server/src/main.ts`](apps/server/src/main.ts): loads both models; one call at a time
   - [`spikes/`](spikes): model downloads and first experiments
   - [`eval/run.ts`](eval/run.ts): the message eval
-- **Measured on the test machine** with both models loaded and used: the QVAC worker process (`bare.exe`) used 4.2 GB of RAM (7.5 GB committed), and the whole GPU showed 6.9 GB in use, including the desktop's own apps. We suggest 8 GB of RAM or more and a GPU with Vulkan 1.4. CPU-only is untested.
+- **Measured on the test machine** with both models loaded and used: the QVAC worker process (`bare.exe`) used 4.2 GB of RAM (7.5 GB committed), and the whole GPU showed 6.9 GB in use, including the desktop's own apps. We suggest 16 GB of RAM and a GPU with Vulkan 1.4. CPU-only, macOS and Linux are untested.
 - **Why a vision model, not OCR:** proofs arrive as SMS-app screenshots, M-PESA app receipts, dark mode, cropped, or forwarded through WhatsApp, each with a different layout. OCR returns lines of text that would need a hand-written parser per layout; Qwen3-VL returns the six fields Kinga needs (code, amount, counterparty, direction, date, time) as JSON from all of them (see Results). Even so, only the transaction code is used to look the payment up: when you don't say what amount to expect, a different amount on the picture is shown as *check the amount* rather than *edited proof*, because a misread must never accuse anyone.
 - **Licences:** Qwen3-4B and Qwen3-VL-2B-Instruct are Apache-2.0 per their model cards. The Swahili-specialised AfriSLM model was not used, because its card lists financial use as out of scope.
 - **What did not work:**
@@ -241,7 +249,10 @@ docs/             screenshots
 - **Synthetic data.** All demo messages, screenshots and the 210-message eval set are synthetic. They were written with AI assistance during development, from public reporting on Kenyan scams. M-PESA message formats come from secondary sources. Kinga has not yet been checked against real 2026 messages, including the new M-PESA Jumbe messages.
 - **Clean screenshots.** The screenshots were rendered from HTML. Real phone screenshots will vary more than the variants above.
 - **The ledger eval** checks the arithmetic, not the parser. The chain resets after templates it does not model (such as Fuliza auto-repayments), and it cannot prove the newest message fake until the next one arrives.
-- **Real money that later goes wrong.** Triangular fraud is caught only when the payer's name can be compared with the buyer's verified name. A genuine payment can still be reversed later.
+- **Real money that later goes wrong.** Triangular fraud is caught only when the payer's name can be compared with the buyer's verified name. A genuine payment can still be reversed if the receiver approves it, or after a dispute.
+- **Gaps in the history.** The balance chain needs the messages around a payment. With messages missing, a genuine payment can read as *balance doesn't follow* or, rarely, *almost certainly fake*; both point to *334# as the deciding check.
+- **Uploaded screenshots** are deleted as soon as the model has read them; only the extracted fields stay, in memory. Imported SMS also stay in memory only.
+- **Local service.** Kinga binds to 127.0.0.1 and answers only pages served from this machine (Host and Origin checks), so another website cannot read the inbox or trigger a release.
 - **Desktop only.** A phone app would read the M-PESA inbox directly. Google Play restricts SMS access to declared uses such as money management, and QVAC supports Expo. Here, you import an SMS export instead.
 - **Kiswahili** wording was written by the developer and still needs review by a native speaker.
 - **Testnet only.** Sepolia; never use a seed that holds real funds.
