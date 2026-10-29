@@ -60,7 +60,9 @@ Nothing else connects anywhere. To check that yourself:
 npm run offline-proof
 ```
 
-It runs every demo flow and records every TCP connection made by Kinga's processes, including QVAC's worker. Result: **0** ([report](eval/reports/offline-proof-2026-10-29-07-57.md)). A `--control` run proves the monitor does catch a connection when one is made.
+It reads the five demo proofs, runs every other demo flow, and records every TCP connection and UDP socket of Kinga's processes, including QVAC's worker. Result: **0** ([report](eval/reports/offline-proof-2026-10-29-07-57.md)). A `--control` run proves the monitor does catch a connection when one is made.
+
+If you cannot switch your network off, `npm run offline-proof -- --simulate-offline` makes every Kinga Node process fail any request beyond this machine, as Wi-Fi off would ([report](eval/reports/offline-proof-simulated-2026-10-29-13-53.md): PASS, 0 refused attempts).
 
 ## Evidence
 

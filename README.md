@@ -125,8 +125,9 @@ Earlier, a 400 px rendering misread Ksh6,500 as 5,000. That is why Kinga looks p
 - The test split has 34 genuine messages, so one message moves the false-positive rate by about 3 points.
 - Reports: [dev](eval/reports/2026-10-28-14-58-dev.md), [test](eval/reports/2026-10-28-15-02-test.md).
 
-**Offline proof** (`npm run offline-proof`). The script starts Kinga, runs every demo message and order (including screenshot reading and an offline signature), and samples the TCP connections of every process Kinga starts (Node and QVAC's Bare worker) every 300 ms.
-- Result: **0 outbound connections**, with the network switched on ([report](eval/reports/offline-proof-2026-10-29-07-57.md)).
+**Offline proof** (`npm run offline-proof`). The script starts Kinga, reads all five demo payment proofs on device, runs every demo message and order (including an offline signature), and every 300 ms samples the TCP connections and UDP sockets of every process Kinga starts (Node and QVAC's Bare worker).
+- **Simulated offline** (`npm run offline-proof -- --simulate-offline`), for machines whose network cannot be switched off: every Node process of Kinga runs with [`scripts/block-network.cjs`](scripts/block-network.cjs), which makes any TCP, UDP or DNS request beyond this machine fail as it would with Wi-Fi off, and logs it. A self-test first shows a Node process with the same settings cannot reach `https://1.1.1.1`. Result: **PASS**, both models loaded, all five proofs read, **0** refused attempts, **0** TCP connections, **0** UDP sockets ([report](eval/reports/offline-proof-simulated-2026-10-29-13-53.md)). QVAC's Bare worker is not Node, so it is watched rather than blocked.
+- With the network on and nothing blocked: **0 outbound connections** ([report](eval/reports/offline-proof-2026-10-29-07-57.md)).
 - A `--control` run deliberately uses a network step, and the monitor catches it ([report](eval/reports/offline-proof-control-2026-10-28-13-56.md)).
 - `--wait-offline` runs it once Wi-Fi goes off.
 
